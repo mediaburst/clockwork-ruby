@@ -1,4 +1,4 @@
-Clockwork SMS API Wrapper for .NET
+Clockwork SMS API Wrapper for Ruby
 ==================================
 
 IMPORTANT
