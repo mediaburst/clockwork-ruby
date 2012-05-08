@@ -16,13 +16,13 @@ module Clockwork
     attr_accessor :from
     
     # @!attribute long
-    # Set to true to enable long SMS. A standard text can contain 160 characters, a long SMS supports up to 459. Each recipient will cost up to 3 message credits.
+    # Set to +true+ to enable long SMS. A standard text can contain 160 characters, a long SMS supports up to 459. Each recipient will cost up to 3 message credits.
     # @return [boolean]
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_accessor :long
     
     # @!attribute truncate
-    # Set to true to trim the message content to the maximum length if it is too long.
+    # Set to +true+ to trim the message content to the maximum length if it is too long.
     # @return [boolean] 
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_accessor :truncate

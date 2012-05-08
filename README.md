@@ -21,8 +21,59 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
 Usage
 -----
 
+Send a single SMS message:
+
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+    message = Clockwork::SMS.new( :to => '441234123456', :content => 'This is a test message.' )
+    
+    begin
+        message.deliver
+        # Do something with message.result
+    rescue StandardError
+        # Do something here
+    end
+    
+Alternative usage:
+
+    require 'clockwork'
+    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+    message = Clockwork::SMS.new
+    message.to = '441234123456'
+    message.content = 'This is a test message.'
+    
+    begin
+        message.deliver
+        # Do something with message.result
+    rescue StandardError
+        # Do something here
+    end
+
+    
+Send multiple SMS messages with advanced options set:
+
+    messages = [
+        { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
+        { :to => '441234123456', :content => 'This is a test message 2.', :client_id => '2' },
+        { :to => '441234123456', :content => 'This is a test message 3.', :client_id => '3' },
+        { :to => '441234123456', :content => 'This is a test message 4.', :client_id => '4' },
+        { :to => '441234123456', :content => 'This is a test message 5.', :client_id => '5' },
+        { :to => '441234123456', :content => 'This is a test message 6.', :client_id => '6' }
+    ]
+    
+    require 'clockwork'
+    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+    
+    messages.each do |m|
+        message = Clockwork::SMS.new(m)
+    
+        begin
+            message.deliver
+            # Do something with message.result
+        rescue StandardError
+            # Do something here
+        end
+    end
 
 License
 -------
