@@ -1,27 +1,22 @@
-Clockwork SMS API Wrapper for Ruby
-==================================
+# Clockwork SMS API Wrapper for Ruby
 
-IMPORTANT
----------
+# IMPORTANT
 
 Don't use this wrapper yet, it will not work until after the next Mediaburst SMS API release.
 
 This README will be updated once that release has happened.
 
-Install
--------
+## Install
 
 No gem is available yet, use the files directly by including them in your Ruby project.
 
-Documentation
--------------
+## Documentation
 
 Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/master/frames][1]. Alternatively, run `yard doc` and open doc/index.html.
 
-Usage
------
+## Usage
 
-Send a single SMS message:
+### Send a single SMS message
 
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
@@ -34,7 +29,7 @@ Send a single SMS message:
         # Do something here
     end
     
-Alternative usage:
+### Alternative usage for sending an SMS message
 
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
@@ -50,7 +45,7 @@ Alternative usage:
     end
 
     
-Send multiple SMS messages with advanced options set:
+### Send multiple SMS messages with advanced options set
 
     messages = [
         { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -74,9 +69,30 @@ Send multiple SMS messages with advanced options set:
             # Do something here
         end
     end
+    
+### Check credit
+    
+    require 'clockwork'
+    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+    remaining_messages = Clockwork::API.credit
+    puts remaining messages # => 240
 
-Test Setup
-----------
+## License
+
+This project is licensed under the ISC open-source license.
+
+A copy of this license can be found in LICENSE.
+
+## Contributing
+
+If you have any feedback on this wrapper drop us an email to [hello@clockworksms.com][2].
+
+The project is hosted on GitHub at [http://www.github.com/mediaburst/clockwork-ruby][3].
+
+If you would like to contribute a bug fix or improvement please fork the project 
+and submit a pull request. Please add RSpec tests for your use case.
+
+### Test Setup
 
 First, create a file at spec/spec_authentication_details containing the following:
 
@@ -87,23 +103,6 @@ First, create a file at spec/spec_authentication_details containing the followin
 Substitute your own API key, username and password on lines 1, 2, and 3 of the file.
 
 Then, run `rspec`. 
-
-License
--------
-
-This project is licensed under the ISC open-source license.
-
-A copy of this license can be found in LICENSE.
-
-Contributing
-------------
-
-If you have any feedback on this wrapper drop us an email to [hello@clockworksms.com][2].
-
-The project is hosted on GitHub at [http://www.github.com/mediaburst/clockwork-ruby][3].
-
-If you would like to contribute a bug fix or improvement please fork the project 
-and submit a pull request. Please add RSpec tests for your use case.
 
 [1]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/frames
 [2]: mailto:hello@clockworksms.com
