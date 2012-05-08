@@ -1,5 +1,8 @@
 # A wrapper around the Clockwork API.
 module Clockwork
+    
+  # Current API wrapper version
+  VERSION = 'DEV'
   
   # @author James Inman <james@mediaburst.co.uk>
   # 
@@ -9,7 +12,7 @@ module Clockwork
     # URL of the SMS API send action
     SMS_URL = "api.clockworksms.com/xml/send"
     # URL of the SMS API check credit action
-    CREDIT_URL  = "api.clockworksms.com/xml/credit"
+    CREDIT_URL = "api.clockworksms.com/xml/credit"
         
     # @!attribute from
     # The from address displayed on a phone when the SMS is received. This can be either a 12 digit number or 11 characters long.
@@ -83,7 +86,10 @@ module Clockwork
     # @raise Clockwork::AuthenticationError - if API login details are incorrect
     # @return [integer] Number of messages remaining    
     def credit
-      
+      xml = Clockwork::XML::Credit.build( self )
+      # TODO: Set @use_ssl here
+      response = Clockwork::HTTP.post( CREDIT_URL, xml, true )
+      credit = Clockwork::XML::Credit.parse( response )
     end
      
     # Alias for Clockwork::API#credit to preserve backwards compatibility with original Mediaburst API.
