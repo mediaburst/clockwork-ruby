@@ -6,9 +6,11 @@ module Clockwork
   # You must create an instance of Clockwork::API to begin using the API.
   class API
     
+    # URL of the SMS API send action
     SMS_URL = "api.clockworksms.com/xml/send"
+    # URL of the SMS API check credit action
     CREDIT_URL  = "api.clockworksms.com/xml/credit"
-    
+        
     # @!attribute from
     # The from address displayed on a phone when the SMS is received. This can be either a 12 digit number or 11 characters long.
     # @return [string] 
@@ -33,27 +35,61 @@ module Clockwork
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_reader :invalid_char_action
     
+    # API key provided in Clockwork::API#initialize.
+    # @return [string] 
+    attr_reader :api_key
+    
+    # Username provided in Clockwork::API#initialize.
+    # @return [string]
+    # @deprecated Use +api_key+ instead.
+    attr_reader :username
+    
+    # Password provided in Clockwork::API#initialize.
+    # @return [string]
+    # @deprecated Use +api_key+ instead.
+    attr_reader :password
+      
+    def invalid_char_action= symbol
+      raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
+    end
+    
     # @overload initalize(api_key)
     #   @param [string] api_key API key, 40-character hexadecimal string
+    #   @param [hash] options Optional hash of attributes on API 
     # @overload initalize(username, password)
     #   @param [string] username Your API username
     #   @param [string] password Your API password
+    #   @param [hash] options Optional hash of attributes on API
     #   @deprecated Use an API key instead. Support for usernames and passwords will be removed in a future version of this wrapper.
-    # @raise ArgumentError - if more than two parameters are passed
+    # @raise ArgumentError - if more than 3 parameters are passed
     # @raise Clockwork::InvalidAPIKeyError - if API key is invalid
     # Clockwork::API is initialized with an API key, available from http://www.mediaburst.co.uk/api.
     def initialize *args
-      if args.size == 1
+      if args.size == 1 || ( args.size == 2 && args[1].kind_of?(Hash) ) 
         raise Clockwork::InvalidAPIKeyError unless args[0][/^[A-Fa-f0-9]{40}$/]
-      elsif args.size == 2
+        @api_key = args[0]
+      elsif args.size == 2 || ( args.size == 3 && args[2].kind_of?(Hash) ) 
         raise ArgumentError, "You must pass both a username and password." if args[0].empty? || args[1].empty?
+        @username = args[0]
+        @password = args[1]
       else
         raise ArgumentError, "You must pass either an API key OR a username and password."
       end
+      
+      args.last.each { |k, v| instance_variable_set "@#{k}", v } if args.last.kind_of?(Hash)
     end
-        
-    def invalid_char_action= symbol
-      raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
+    
+    # Check the remaining credit for this account.
+    # @raise Clockwork::AuthenticationError - if API login details are incorrect
+    # @return [integer] Number of messages remaining    
+    def credit
+      
+    end
+     
+    # Alias for Clockwork::API#credit to preserve backwards compatibility with original Mediaburst API.
+    # @deprecated Use Clockwork::API#credit. Support for Clockwork::API#get_credit will be removed in a future version of this wrapper.
+    def get_credit
+      credit
     end
     
   end

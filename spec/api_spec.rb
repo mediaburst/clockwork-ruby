@@ -22,6 +22,7 @@ describe "API", "#initialize" do
   it "should return a valid instance of Clockwork::API if a valid API key is passed" do
     api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875'
     api.should be_a_kind_of Clockwork::API
+    api.api_key.should == 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875'
   end
   
   it "should raise an ArgumentError if two paramters are passed but either username or password is blank" do
@@ -30,8 +31,31 @@ describe "API", "#initialize" do
     expect { Clockwork::API.new('', '') }.to raise_error ArgumentError
   end
   
-  it "should raise an ArgumentError if more than two parameters are passed" do
+  it "should return a valid instance of Clockwork::API if a valid username and password are passed" do
+    api = Clockwork::API.new 'username', 'password'
+    api.should be_a_kind_of Clockwork::API
+    api.username.should == 'username'
+    api.password.should == 'password'
+  end
+  
+  it "should raise an ArgumentError if more than three parameters are passed" do
     expect { Clockwork::API.new('', '', '') }.to raise_error ArgumentError
+  end
+  
+  it "should set options if a parameters hash is passed along with the API key" do
+    api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875', { :from => 'A Test', :long => true, :truncate => true, :invalid_char_action => :remove }
+    api.from.should == "A Test"
+    api.long.should == true
+    api.truncate.should == true
+    api.invalid_char_action.should == :remove
+  end
+  
+  it "should set options if a parameters hash is passed along with the username and password" do
+    api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875', { :from => 'A Test', :long => false, :truncate => false, :invalid_char_action => :remove }
+    api.from.should == "A Test"
+    api.long.should == false
+    api.truncate.should == false
+    api.invalid_char_action.should == :remove
   end
 
 end
@@ -52,4 +76,12 @@ describe "API", "#invalid_char_action" do
     expect { api.invalid_char_action = :remove }.to_not raise_error ArgumentError
   end
 
+end
+
+describe "API", "#credit" do
+  
+end
+
+describe "API", "#get_credit" do
+  
 end
