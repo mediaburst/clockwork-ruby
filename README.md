@@ -78,7 +78,7 @@ Send multiple SMS messages with advanced options set:
 Test Setup
 ----------
 
-First, create a file at spec/spec_authentication_details.rb containing the following:
+First, create a file at spec/spec_authentication_details containing the following:
 
     34023ada3ec0d99213f91a12a2329ba932665ed7
     MyLegacyAPIUsername@mydomain.com
