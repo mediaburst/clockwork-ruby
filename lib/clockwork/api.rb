@@ -11,7 +11,9 @@ module Clockwork
     # @raise Clockwork::InvalidAPIKeyException
     # Clockwork::API is initialized with an API key, available from http://www.mediaburst.co.uk/api/.
     def initialize api_key 
-      # 40 character [A-F0-9a-f]
+      raise Clockwork::InvalidAPIKeyException unless api_key[/^[A-Fa-f0-9]{40}$/]
+      
+      
     end
     
   end
