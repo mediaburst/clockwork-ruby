@@ -6,6 +6,10 @@ Don't use this wrapper yet, it will not work until after the next Mediaburst SMS
 
 This README will be updated once that release has happened.
 
+Still to do:
+* Split-testing for more than 500 messages
+* Net::HTTP::Proxy settings
+
 ## Install
 
 No gem is available yet, use the files directly by including them in your Ruby project.
