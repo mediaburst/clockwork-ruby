@@ -9,13 +9,13 @@ module Clockwork
       # @return [string] XML data
       def self.build api
         if api.api_key
-          builder = Nokogiri::XML::Builder.new do |xml|
+          builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
             xml.Credit {
               xml.Key api.api_key
             }
           end          
         else
-          builder = Nokogiri::XML::Builder.new do |xml|
+          builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
             xml.Credit {
               xml.Username api.username
               xml.Password api.password

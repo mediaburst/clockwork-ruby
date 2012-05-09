@@ -36,7 +36,7 @@ module Clockwork
     attr_reader :invalid_char_action
     
     # @!attribute to
-    # *REQUIRED:* The phone number to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890.
+    # *REQUIRED:* The phone number to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890).
     # @return [string]
     attr_accessor :to
     
@@ -58,10 +58,6 @@ module Clockwork
     # Deliver the SMS message
     # @return Clockwork::SMS::Response
     def deliver
-    end
-    
-    # Alias for Clockwork::SMS#deliver to preserve backwards compatibility with original Mediaburst API.
-    def send_message
     end
     
   end
