@@ -1,6 +1,8 @@
 module Clockwork
   module XML
     
+    # @author James Inman <james@mediaburst.co.uk>
+    # 
     # XML building and parsing for checking credit.
     class Credit
       

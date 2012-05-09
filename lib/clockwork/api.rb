@@ -5,18 +5,13 @@ module Clockwork
   VERSION = 'DEV'
   
   # @author James Inman <james@mediaburst.co.uk>
-  # 
   # You must create an instance of Clockwork::API to begin using the API.
   class API
     
     # URL of the SMS API send action
     SMS_URL = "api.clockworksms.com/xml/send"
     # URL of the SMS API check credit action
-    CREDIT_URL = "api.clockworksms.com/xml/credit"
-    
-    # Alias for Clockwork::API#messages_to_concat to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::API#messages_to_concat instead. Support for Clockwork::API#concat will be removed in a future version of this wrapper.
-    alias :concat= :messages_to_concat=
+    CREDIT_URL = "api.clockworksms.com/xml/credit"    
     
     # API key provided in Clockwork::API#initialize.
     # @return [string] 
@@ -66,6 +61,24 @@ module Clockwork
     # @return [string]
     # @deprecated Use api_key instead.
     attr_reader :username
+        
+    # Alias for Clockwork::API#messages_to_concat to preserve backwards compatibility with original Mediaburst API.
+    # @deprecated Use Clockwork::API#messages_to_concat instead. Support for Clockwork::API#concat will be removed in a future version of this wrapper.
+    def concat
+      messages_to_concat
+    end
+          
+    # Alias for Clockwork::API#messages_to_concat= to preserve backwards compatibility with original Mediaburst API.
+    # @deprecated Use Clockwork::API#messages_to_concat= instead. Support for Clockwork::API#concat= will be removed in a future version of this wrapper.
+    def concat= val
+      messages_to_concat val
+    end
+         
+    # Alias for Clockwork::API#credit to preserve backwards compatibility with original Mediaburst API.
+    # @deprecated Use Clockwork::API#credit. Support for Clockwork::API#get_credit will be removed in a future version of this wrapper.
+    def get_credit
+      credit
+    end
       
     def invalid_char_action= symbol
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
@@ -105,19 +118,24 @@ module Clockwork
     end
     
     # Check the remaining credit for this account.
-    # @raise Clockwork::AuthenticationError - if API login details are incorrect
+    # @raise Clockwork::Error::Authentication - if API login details are incorrect
     # @return [integer] Number of messages remaining    
     def credit
       xml = Clockwork::XML::Credit.build( self )
       response = Clockwork::HTTP.post( CREDIT_URL, xml, @use_ssl )
       credit = Clockwork::XML::Credit.parse( response )
     end
-     
-    # Alias for Clockwork::API#credit to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::API#credit. Support for Clockwork::API#get_credit will be removed in a future version of this wrapper.
-    def get_credit
-      credit
+    
+    # Alias for Clockwork::API#messages_to_concat to preserve backwards compatibility with original Mediaburst API.
+    # @deprecated Use Clockwork::API#messages_to_concat instead. Support for Clockwork::API#concat will be removed in a future version of this wrapper.
+
+    def concat
+      messages_to_concat
     end
+    
+    
+    
+    
     
     # Alias for Clockwork::SMS#deliver to preserve backwards compatibility with original Mediaburst API.
     # @deprecated Use Clockwork::SMS#deliver. Support for Clockwork::API#send_message will be removed in a future version of this wrapper.  

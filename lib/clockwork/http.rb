@@ -1,5 +1,6 @@
 module Clockwork
   
+  # @author James Inman <james@mediaburst.co.uk>
   # Wrapper around NET/HTTP
   class HTTP
     

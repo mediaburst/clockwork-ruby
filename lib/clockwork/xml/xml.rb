@@ -1,7 +1,8 @@
 require 'nokogiri'
 
 module Clockwork
-  
+
+  # @author James Inman <james@mediaburst.co.uk>
   # Wrapper for the XML builder/parser
   module XML        
   end
