@@ -118,7 +118,13 @@ describe "API" do
     it "should return the number of messages remaining with an API key" do
       api = Clockwork::API.new test_api_key
       api.get_credit.should be > 0
-    end  
+    end
+    
+    it "should return the number of messages remaining over standard HTTP" do
+      api = Clockwork::API.new test_api_key
+      api.use_ssl = false
+      api.get_credit.should be > 0
+    end      
     
     it "should raise an error with an invalid username and password" do
       api = Clockwork::API.new 'username', 'password'

@@ -13,24 +13,16 @@ module Clockwork
     SMS_URL = "api.clockworksms.com/xml/send"
     # URL of the SMS API check credit action
     CREDIT_URL = "api.clockworksms.com/xml/credit"
+    
+    # API key provided in Clockwork::API#initialize.
+    # @return [string] 
+    attr_reader :api_key
         
     # @!attribute from
     # The from address displayed on a phone when the SMS is received. This can be either a 12 digit number or 11 characters long.
     # @return [string] 
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_accessor :from
-    
-    # @!attribute long
-    # Set to +true+ to enable long SMS. A standard text can contain 160 characters, a long SMS supports up to 459. Each recipient will cost up to 3 message credits.
-    # @return [boolean]
-    # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
-    attr_accessor :long
-    
-    # @!attribute truncate
-    # Set to +true+ to trim the message content to the maximum length if it is too long.
-    # @return [boolean] 
-    # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
-    attr_accessor :truncate
         
     # What to do with any invalid characters in the message content. +:error+ will raise a Clockwork::InvalidCharacterException, +:replace+ will replace a small number of common invalid characters, such as the smart quotes used by Microsoft Office with a similar match, +:remove+ will remove invalid characters.
     # @raise ArgumentError - if value is not one of +:error+, +:replace+, +:remove+
@@ -38,19 +30,32 @@ module Clockwork
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_reader :invalid_char_action
     
-    # API key provided in Clockwork::API#initialize.
-    # @return [string] 
-    attr_reader :api_key
-    
-    # Username provided in Clockwork::API#initialize.
-    # @return [string]
-    # @deprecated Use +api_key+ instead.
-    attr_reader :username
+    # @!attribute long
+    # Set to +true+ to enable long SMS. A standard text can contain 160 characters, a long SMS supports up to 459. Each recipient will cost up to 3 message credits.
+    # @return [boolean]
+    # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
+    attr_accessor :long
     
     # Password provided in Clockwork::API#initialize.
     # @return [string]
     # @deprecated Use +api_key+ instead.
     attr_reader :password
+    
+    # @!attribute truncate
+    # Set to +true+ to trim the message content to the maximum length if it is too long.
+    # @return [boolean] 
+    # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
+    attr_accessor :truncate
+    
+    # Whether to use SSL when connecting to the API.
+    # Defaults to +true+
+    # @return [boolean] 
+    attr_accessor :use_ssl
+    
+    # Username provided in Clockwork::API#initialize.
+    # @return [string]
+    # @deprecated Use +api_key+ instead.
+    attr_reader :username
       
     def invalid_char_action= symbol
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
@@ -80,6 +85,8 @@ module Clockwork
       end
       
       args.last.each { |k, v| instance_variable_set "@#{k}", v } if args.last.kind_of?(Hash)
+      
+      @use_ssl = true if @use_ssl.nil?
     end
     
     # Check the remaining credit for this account.
@@ -87,8 +94,7 @@ module Clockwork
     # @return [integer] Number of messages remaining    
     def credit
       xml = Clockwork::XML::Credit.build( self )
-      # TODO: Set @use_ssl here
-      response = Clockwork::HTTP.post( CREDIT_URL, xml, true )
+      response = Clockwork::HTTP.post( CREDIT_URL, xml, @use_ssl )
       credit = Clockwork::XML::Credit.parse( response )
     end
      
