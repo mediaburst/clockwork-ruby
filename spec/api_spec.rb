@@ -95,6 +95,16 @@ describe "API" do
       api = Clockwork::API.new test_api_key
       api.credit.should be > 0
     end  
+    
+    it "should raise an error with an invalid username and password" do
+      api = Clockwork::API.new 'username', 'password'
+      expect { api.credit }.to raise_error Clockwork::AuthenticationError
+    end
+    
+    it "should raise an error with an invalid API key" do
+      api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
+      expect { api.credit }.to raise_error Clockwork::GenericError
+    end
   
   end
 
@@ -110,6 +120,16 @@ describe "API" do
       api.get_credit.should be > 0
     end  
     
+    it "should raise an error with an invalid username and password" do
+      api = Clockwork::API.new 'username', 'password'
+      expect { api.get_credit }.to raise_error Clockwork::AuthenticationError
+    end
+    
+    it "should raise an error with an invalid API key" do
+      api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
+      expect { api.get_credit }.to raise_error Clockwork::GenericError
+    end
+  
   end
 
 end

@@ -1,7 +1,11 @@
 module Clockwork
   
-  # Raised if the entered authentication details (API key or username and password) are incorrect.
+  # Raised if the entered authentication details (API key or username and password) are incorrect. (Error code: 2)
   class AuthenticationError < StandardError
+  end
+  
+  # Raised for all error codes not otherwise specified
+  class GenericError < StandardError
   end
   
   # Raised if a HTTP connection to the API fails

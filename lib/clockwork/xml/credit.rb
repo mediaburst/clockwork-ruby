@@ -25,13 +25,22 @@ module Clockwork
         builder.to_xml
       end
     
-      # Parse the XML response
-      # @param [Net::HTTPResponse] api Instance of Clockwork::API
+      # Parse the XML response.
+      # @param [Net::HTTPResponse] response Instance of Net::HTTPResponse
+      # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
+      # @raise Clockwork::GenericError - if API login details are incorrect 
+      # @raise Clockwork::AuthenticationError - if API login details are incorrect 
       # @return [string] XML data    
       def self.parse response
         if response.code.to_i == 200
           doc = Nokogiri.parse( response.body )
-          doc.css('Credit').inner_html.to_i
+          if doc.css('ErrDesc').empty?
+            doc.css('Credit').inner_html.to_i
+          elsif doc.css('ErrNo').inner_html.to_i == 2
+            raise Clockwork::AuthenticationError, doc.css('ErrDesc').inner_html
+          else
+            raise Clockwork::GenericError, doc.css('ErrDesc').inner_html
+          end
         else
           raise Clockwork::HTTPError, "Could not connect to the Clockwork API to check credit."
         end
