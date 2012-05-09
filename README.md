@@ -16,9 +16,9 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
 
 ## Usage
 
-For more information on the available optional parameters for the API (`Clockwork::API`), see [here][4].
+For more information on the available optional parameters for the API (Clockwork::API), see [here][4].
 
-For more information on the available optional parameters for each SMS (`Clockwork::SMS`), see [here][5]. For more information on the response object returned from each SMS (`Clockwork::SMS::Response`), see [here][6].
+For more information on the available optional parameters for each SMS (Clockwork::SMS), see [here][5]. For more information on the response object returned from each SMS (Clockwork::SMS::Response), see [here][6].
 
 ### Send a single SMS message
 
@@ -53,7 +53,7 @@ For more information on the available optional parameters for each SMS (`Clockwo
     
 ### Send multiple SMS messages with an optional client ID
 
-You should not use the `Clockwork::SMS#deliver` method for each message, but instead use the `Clockwork::API#deliver_messages` method to send multiple messages in the same API request.
+You should not use the `deliver` method for each message, but instead use the `Clockwork::API#deliver_messages` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed faster.
 
     messages = [
         { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -90,7 +90,7 @@ You should not use the `Clockwork::SMS#deliver` method for each message, but ins
     
 ## Notes
 
-*Backwards Compatibility:* This API is entirely backwards compatible with the legacy *ruby-mediaburst-sms* gem - simply replace 'Mediaburst' with 'Clockwork' in your code that uses the library. However, we strongly recommend you update your code to use the above examples.
+**Backwards Compatibility:** This API is entirely backwards compatible with the legacy *ruby-mediaburst-sms* gem - simply replace 'Mediaburst' with 'Clockwork' in your code that uses the library. However, we strongly recommend you update your code to use the above examples.
 
 ## License
 
