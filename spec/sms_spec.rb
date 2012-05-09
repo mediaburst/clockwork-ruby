@@ -18,31 +18,63 @@ describe "SMS" do
   
   describe "#deliver" do
     
-    # it "should accept a single phone number and a message parameter" do
-    #   api = Clockwork::API.new test_api_key
-    #   result = api.send_message '441234123456', 'This is a test.'
-    #   result.should be_an_instance_of Clockwork::SMS::Response
-    #   result.success.should == true
-    #   result.message_id.should_not be_empty
-    # end
+    it "should accept a single phone number and a message parameter" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
+      response = message.deliver
+      
+      response.should be_an_instance_of Clockwork::SMS::Response
+      response.success.should == true
+      response.message_id.should_not be_empty
+    end
     
-    # it "should accept an array of phone numbers and a message parameter" do
-    #   api = Clockwork::API.new test_api_key
-    #   results = api.send_message ['441234123456', '441234654321'], 'This is a test.'
-    #   
-    # end
-    # 
-    # it "should accept additional options"
-    # 
-    # it "should not send a blank message" do
-    #   api = Clockwork::API.new test_api_key
-    #   result = api.send_message '441234123456', ''
-    #   result.should be_an_instance_of Clockwork::SMS::Response
-    #   result.success.should == false
-    #   result.message_id.should be_nil
-    #   result.error_code.should == 7
-    # end
-  
+    it "should not send a blank message" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => '' )
+      response = message.deliver
+      
+      response.should be_an_instance_of Clockwork::SMS::Response
+      response.success.should == false
+      response.message_id.should be_nil
+      response.error_code.should == 7
+    end
+    
+    it "should accept additional parameters" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'This is a test message.', :client_id => 'message123' )
+      response = message.deliver
+      
+      response.should be_an_instance_of Clockwork::SMS::Response
+      response.success.should == true
+      response.message_id.should_not be_empty
+      response.message.client_id.should == 'message123'
+    end
+    
+    it "should allow delivering multiple messages" do
+      messages = [
+          { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
+          { :to => '441234123456', :content => 'This is a test message 2.', :client_id => '2' },
+          { :to => '441234123456', :content => 'This is a test message 3.', :client_id => '3' },
+          { :to => '441234123456', :content => 'This is a test message 4.', :client_id => '4' },
+          { :to => '441234123456', :content => 'This is a test message 5.', :client_id => '5' },
+          { :to => '441234123456', :content => 'This is a test message 6.', :client_id => '6' },
+          { :to => '44', :content => 'This is a test message 6.', :client_id => '7' }
+      ]
+
+      api = Clockwork::API.new test_api_key
+      messages.each do |m|
+        api.messages.build(m)
+      end
+
+      responses = api.deliver_messages
+      
+      responses.count.should == 7
+      responses.first.success.should == true
+      
+      responses.last.success.should == false
+      responses.last.error_code.should == 10
+    end
+    
   end
   
 end

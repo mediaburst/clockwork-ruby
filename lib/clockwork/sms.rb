@@ -8,6 +8,11 @@ module Clockwork
     # An instance of Clockwork::API.
     # @return [Clockwork::API]
     attr_accessor :api
+    
+    # @!attribute content
+    # *REQUIRED:* The message content to send.
+    # @return [string]
+    attr_accessor :content
             
     # @!attribute client_id
     # An unique message ID specified by the connecting application, for example your database record ID. Maximum length: 50 characters.
@@ -43,15 +48,10 @@ module Clockwork
     # @return [string]
     attr_accessor :to
     
-    # @!attribute message
-    # *REQUIRED:* The message content to send.
-    # @return [string]
-    attr_accessor :message
-    
     def invalid_char_action= symbol
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
     end    
-      
+    
     # @param [hash] options Optional hash of attributes on Clockwork::SMS
     # Create a new SMS message.
     def initialize options = {}      
@@ -75,7 +75,7 @@ module Clockwork
       translations << { :var => 'concat', :xml_var => 'Concat' }
       translations << { :var => 'from', :xml_var => 'From' }
       translations << { :var => 'invalid_char_action', :xml_var => 'InvalidCharAction' }
-      translations << { :var => 'message', :xml_var => 'Content' }
+      translations << { :var => 'content', :xml_var => 'Content' }
       translations << { :var => 'to', :xml_var => 'To' }
       translations << { :var => 'truncate', :xml_var => 'Truncate' }
       

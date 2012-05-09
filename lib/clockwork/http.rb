@@ -26,7 +26,7 @@ module Clockwork
       
       req.content_type = "text/xml"
       req.body = data
-      req.add_field 'User-Agent', "Clockwork .NET Wrapper/#{Clockwork::VERSION}"
+      req.add_field 'User-Agent', "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
       
       response = socket.start do |http|
         http.request( req )

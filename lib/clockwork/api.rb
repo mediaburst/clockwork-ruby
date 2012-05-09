@@ -154,18 +154,21 @@ module Clockwork
         args[0].each do |number|        
           sms = self.messages.build( options )
           sms.to = number
-          sms.message = args[1]        
-          response = sms.deliver
+          sms.content = args[1]
+        end
+        responses = self.deliver_messages
+        responses.each do |response|
           if response.success
-            result["#{sms.to}"] = true
+            result["#{response.message.to}"] = true
           else
-            result["#{sms.to}"] = response.error_code
+            result["#{response.message.to}"] = response.error_code
           end
         end
+        
       elsif args[0].kind_of?(String)        
         sms = self.messages.build( options )
         sms.to = args[0]
-        sms.message = args[1]        
+        sms.content = args[1]        
         response = sms.deliver
         if response.success
           result["#{sms.to}"] = true
@@ -175,6 +178,14 @@ module Clockwork
       end
       
       result      
+    end
+    
+    # Deliver multiple messages created using Clockwork::API#messages.build.
+    # @return [array] Array of Clockwork::SMS::Response objects for messages.    
+    def deliver_messages
+      xml = Clockwork::XML::SMS.build_multiple( self.messages )
+      http_response = Clockwork::HTTP.post( Clockwork::API::SMS_URL, xml, @use_ssl )
+      responses = Clockwork::XML::SMS.parse_multiple( self.messages, http_response )
     end
     
   end
