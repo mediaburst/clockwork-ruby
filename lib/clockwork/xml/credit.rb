@@ -30,8 +30,8 @@ module Clockwork
       # Parse the XML response.
       # @param [Net::HTTPResponse] response Instance of Net::HTTPResponse
       # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
-      # @raise Clockwork::GenericError - if API login details are incorrect 
-      # @raise Clockwork::AuthenticationError - if API login details are incorrect 
+      # @raise Clockwork::Error::Generic - if API login details are incorrect 
+      # @raise Clockwork::Error::Authentication - if API login details are incorrect 
       # @return [string] XML data    
       def self.parse response
         if response.code.to_i == 200
@@ -39,12 +39,12 @@ module Clockwork
           if doc.css('ErrDesc').empty?
             doc.css('Credit').inner_html.to_i
           elsif doc.css('ErrNo').inner_html.to_i == 2
-            raise Clockwork::AuthenticationError, doc.css('ErrDesc').inner_html
+            raise Clockwork::Error::Authentication, doc.css('ErrDesc').inner_html
           else
-            raise Clockwork::GenericError, doc.css('ErrDesc').inner_html
+            raise Clockwork::Error::Generic, doc.css('ErrDesc').inner_html
           end
         else
-          raise Clockwork::HTTPError, "Could not connect to the Clockwork API to check credit."
+          raise Clockwork::Error::HTTP, "Could not connect to the Clockwork API to check credit."
         end
       end
       

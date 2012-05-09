@@ -8,11 +8,11 @@ describe "API" do
   
   describe "#initialize" do
 
-    it "should raise a Clockwork::InvalidAPIKeyError if no API key is passed" do
-      expect { Clockwork::API.new('') }.to raise_error Clockwork::InvalidAPIKeyError
+    it "should raise a Clockwork::Error::InvalidAPIKey if no API key is passed" do
+      expect { Clockwork::API.new('') }.to raise_error Clockwork::Error::InvalidAPIKey
     end
   
-    it "should raise a Clockwork::InvalidAPIKeyError if an invalid format of API key is passed" do
+    it "should raise a Clockwork::Error::InvalidAPIKey if an invalid format of API key is passed" do
       invalid_keys = %w{
       q4353q345325325432
       vsdfgihet8f7yi4u7ttf4guyi
@@ -21,7 +21,7 @@ describe "API" do
       }
     
       invalid_keys.each do |k|
-        expect { Clockwork::API.new(k) }.to raise_error Clockwork::InvalidAPIKeyError
+        expect { Clockwork::API.new(k) }.to raise_error Clockwork::Error::InvalidAPIKey
       end
     end
   
@@ -98,12 +98,12 @@ describe "API" do
     
     it "should raise an error with an invalid username and password" do
       api = Clockwork::API.new 'username', 'password'
-      expect { api.credit }.to raise_error Clockwork::AuthenticationError
+      expect { api.credit }.to raise_error Clockwork::Error::Authentication
     end
     
     it "should raise an error with an invalid API key" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
-      expect { api.credit }.to raise_error Clockwork::GenericError
+      expect { api.credit }.to raise_error Clockwork::Error::Generic
     end
   
   end
@@ -128,12 +128,12 @@ describe "API" do
     
     it "should raise an error with an invalid username and password" do
       api = Clockwork::API.new 'username', 'password'
-      expect { api.get_credit }.to raise_error Clockwork::AuthenticationError
+      expect { api.get_credit }.to raise_error Clockwork::Error::Authentication
     end
     
     it "should raise an error with an invalid API key" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
-      expect { api.get_credit }.to raise_error Clockwork::GenericError
+      expect { api.get_credit }.to raise_error Clockwork::Error::Generic
     end
   
   end

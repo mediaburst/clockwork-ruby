@@ -97,11 +97,11 @@ module Clockwork
     #   @param [hash] options Optional hash of attributes on API
     #   @deprecated Use an API key instead. Support for usernames and passwords will be removed in a future version of this wrapper.
     # @raise ArgumentError - if more than 3 parameters are passed
-    # @raise Clockwork::InvalidAPIKeyError - if API key is invalid
+    # @raise Clockwork::Error::InvalidAPIKey - if API key is invalid
     # Clockwork::API is initialized with an API key, available from http://www.mediaburst.co.uk/api.
     def initialize *args
       if args.size == 1 || ( args.size == 2 && args[1].kind_of?(Hash) ) 
-        raise Clockwork::InvalidAPIKeyError unless args[0][/^[A-Fa-f0-9]{40}$/]
+        raise Clockwork::Error::InvalidAPIKey unless args[0][/^[A-Fa-f0-9]{40}$/]
         @api_key = args[0]
       elsif args.size == 2 || ( args.size == 3 && args[2].kind_of?(Hash) ) 
         raise ArgumentError, "You must pass both a username and password." if args[0].empty? || args[1].empty?

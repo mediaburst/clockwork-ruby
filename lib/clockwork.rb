@@ -4,7 +4,7 @@ $LOAD_PATH.unshift lib_dir unless $LOAD_PATH.include?(lib_dir)
 require 'net/http'
 require 'nokogiri'
 
-require 'clockwork/errors'
+require 'clockwork/error'
 require 'clockwork/http'
 require 'clockwork/xml/xml'
 
