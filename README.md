@@ -16,9 +16,9 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
 
 ## Usage
 
-For more information on the available optional parameters for the API, see [here][4].
+For more information on the available optional parameters for the API (`Clockwork::API`), see [here][4].
 
-For more information on the available optional parameters for each SMS, see [here][5].
+For more information on the available optional parameters for each SMS (`Clockwork::SMS`), see [here][5]. For more information on the response object returned from each SMS (`Clockwork::SMS::Response`), see [here][6].
 
 ### Send a single SMS message
 
@@ -53,7 +53,7 @@ For more information on the available optional parameters for each SMS, see [her
     
 ### Send multiple SMS messages with an optional client ID
 
-You should not use the +Clockwork::SMS#deliver+ method for each message, but instead use the +Clockwork::API#deliver_messages+ method to send multiple messages in the same API request.
+You should not use the `Clockwork::SMS#deliver` method for each message, but instead use the `Clockwork::API#deliver_messages` method to send multiple messages in the same API request.
 
     messages = [
         { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -124,3 +124,4 @@ Then, run `rspec`.
 [3]: http://www.github.com/mediaburst/clockwork-ruby
 [4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
 [5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS
+[6]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS/Response
