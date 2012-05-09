@@ -23,15 +23,15 @@ module Clockwork
         socket = Net::HTTP.new( uri.host, uri.port ) 
       end
       
-      req.content_type = "text/xml" 
-      # req.initialize_http_header( 'User-Agent' => "Clockwork .NET Wrapper/#{Clockwork::VERSION}" )
+      req.content_type = "text/xml"
       req.body = data
+      req.add_field 'User-Agent', "Clockwork .NET Wrapper/#{Clockwork::VERSION}"
       
       response = socket.start do |http|
         http.request( req )
       end
       
-      response      
+      response
     end
 
   end
