@@ -8,5 +8,7 @@ require 'clockwork/error'
 require 'clockwork/http'
 require 'clockwork/xml/xml'
 
+require 'clockwork/message_collection'
 require 'clockwork/api'
 require 'clockwork/sms'
+require 'clockwork/sms/response'

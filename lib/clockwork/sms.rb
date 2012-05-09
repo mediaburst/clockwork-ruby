@@ -1,10 +1,14 @@
-# A wrapper around the Clockwork API.
 module Clockwork
   
   # @author James Inman <james@mediaburst.co.uk>
   # Create an instance of Clockwork::SMS for each SMS message you want to send.
   class SMS
-        
+    
+    # @!attribute api
+    # An instance of Clockwork::API.
+    # @return [Clockwork::API]
+    attr_accessor :api
+            
     # @!attribute client_id
     # An unique message ID specified by the connecting application, for example your database record ID. Maximum length: 50 characters.
     # @return [string]
@@ -54,10 +58,34 @@ module Clockwork
       options.each { |k, v| instance_variable_set "@#{k}", v } if options.kind_of?(Hash)
     end
     
-    # Deliver the SMS message
-    # @return Clockwork::SMS::Response
+    # Deliver the SMS message.
+    # @return [Clockwork::SMS::Response] An instance of Clockwork::SMS::Response
     def deliver
+      xml = Clockwork::XML::SMS.build_single( self )
+      http_response = Clockwork::HTTP.post( Clockwork::API::SMS_URL, xml, @api.use_ssl )
+      response = Clockwork::XML::SMS.parse_single( self, http_response )      
     end
+    
+    # Translate standard variable names to those needed to make an XML request. First, checks if global variables are set in Clockwork::API then overwrites with variables set in Clockwork::SMS instance.
+    # @return [hash] Hash of XML keys and values
+    def translated_attributes
+      attributes = {}
+      translations = []
+      translations << { :var => 'client_id', :xml_var => 'ClientID' }
+      translations << { :var => 'concat', :xml_var => 'Concat' }
+      translations << { :var => 'from', :xml_var => 'From' }
+      translations << { :var => 'invalid_char_action', :xml_var => 'InvalidCharAction' }
+      translations << { :var => 'message', :xml_var => 'Content' }
+      translations << { :var => 'to', :xml_var => 'To' }
+      translations << { :var => 'truncate', :xml_var => 'Truncate' }
+      
+      translations.each do |t|
+        self.instance_variable_set( "@#{t[:var]}", @api.instance_variable_get( "@#{t[:var]}" ) ) if self.instance_variable_get( "@#{t[:var]}" ).nil?
+        attributes[ t[:xml_var] ] = self.instance_variable_get( "@#{t[:var]}" ) unless self.instance_variable_get( "@#{t[:var]}" ).nil?
+      end
+
+      attributes
+    end 
     
   end
   

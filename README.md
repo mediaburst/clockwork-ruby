@@ -16,36 +16,44 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
 
 ## Usage
 
+For more information on the available optional parameters for the API, see [here][4].
+
+For more information on the available optional parameters for each SMS, see [here][5].
+
 ### Send a single SMS message
 
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    message = Clockwork::SMS.new( :to => '441234123456', :content => 'This is a test message.' )
+    message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
+    response = message.deliver
     
-    begin
-        message.deliver
-        # Do something with message.result
-    rescue StandardError
-        # Do something here
+    if response.success
+        puts response.message_id
+    else
+        puts response.error_code
+        puts response.error_description
     end
     
 ### Alternative usage for sending an SMS message
 
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    message = Clockwork::SMS.new
+    
+    message = api.messages.build
     message.to = '441234123456'
     message.content = 'This is a test message.'
+    response = message.deliver
     
-    begin
-        message.deliver
-        # Do something with message.result
-    rescue StandardError
-        # Do something here
+    if response.success
+        puts response.message_id
+    else
+        puts response.error_code
+        puts response.error_description
     end
-
     
-### Send multiple SMS messages with advanced options set
+### Send multiple SMS messages with an optional client ID
+
+You should not use the +Clockwork::SMS#deliver+ method for each message, but instead use the +Clockwork::API#deliver_messages+ method to send multiple messages in the same API request.
 
     messages = [
         { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -58,15 +66,18 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
     
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    
     messages.each do |m|
-        message = Clockwork::SMS.new(m)
+        api.messages.build(m)
+    end
     
-        begin
-            message.deliver
-            # Do something with message.result
-        rescue StandardError
-            # Do something here
+    responses = api.deliver_messages
+    responses.each do |response|
+        puts response.client_id
+        if response.success
+            puts response.message_id
+        else
+            puts response.error_code
+            puts response.error_description
         end
     end
     
@@ -76,6 +87,10 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
     remaining_messages = Clockwork::API.credit
     puts remaining messages # => 240
+    
+## Notes
+
+*Backwards Compatibility:* This API is entirely backwards compatible with the legacy *ruby-mediaburst-sms* gem - simply replace 'Mediaburst' with 'Clockwork' in your code that uses the library. However, we strongly recommend you update your code to use the above examples.
 
 ## License
 
@@ -107,3 +122,5 @@ Then, run `rspec`.
 [1]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/frames
 [2]: mailto:hello@clockworksms.com
 [3]: http://www.github.com/mediaburst/clockwork-ruby
+[4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
+[5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS

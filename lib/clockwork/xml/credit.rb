@@ -2,7 +2,6 @@ module Clockwork
   module XML
     
     # @author James Inman <james@mediaburst.co.uk>
-    # 
     # XML building and parsing for checking credit.
     class Credit
       
@@ -10,19 +9,15 @@ module Clockwork
       # @param [Clockwork::API] api Instance of Clockwork::API
       # @return [string] XML data
       def self.build api
-        if api.api_key
-          builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
-            xml.Credit {
+        builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
+          xml.Credit {
+            if api.api_key
               xml.Key api.api_key
-            }
-          end          
-        else
-          builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
-            xml.Credit {
+            else
               xml.Username api.username
               xml.Password api.password
-            }
-          end
+            end
+          }
         end
         builder.to_xml
       end
@@ -30,9 +25,9 @@ module Clockwork
       # Parse the XML response.
       # @param [Net::HTTPResponse] response Instance of Net::HTTPResponse
       # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
-      # @raise Clockwork::Error::Generic - if API login details are incorrect 
+      # @raise Clockwork::Error::Generic - if the API returns an error code other than 2
       # @raise Clockwork::Error::Authentication - if API login details are incorrect 
-      # @return [string] XML data    
+      # @return [string] Number of remaining credits    
       def self.parse response
         if response.code.to_i == 200
           doc = Nokogiri.parse( response.body )

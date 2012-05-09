@@ -137,5 +137,33 @@ describe "API" do
     end
   
   end
+  
+  describe "#send_message" do
+    
+    it "should accept a single phone number and a message parameter" do
+      api = Clockwork::API.new test_api_key
+      result = api.send_message '441234123456', 'This is a test.'
+      result.should be_an_instance_of Hash
+      result_hash = { '441234123456' => true }
+      result.should == result_hash
+    end
+
+    it "should not send a blank message" do
+      api = Clockwork::API.new test_api_key
+      result = api.send_message '441234123456', ''
+      result.should be_an_instance_of Hash
+      result_hash = { '441234123456' => 7 }
+      result.should == result_hash
+    end
+    
+    it "should accept an array of phone numbers and a message parameter" do
+      api = Clockwork::API.new test_api_key
+      result = api.send_message ['441234123456', '441234654321', '44'], 'This is a test.'
+      result.should be_an_instance_of Hash
+      result_hash = { '441234123456' => true, '441234654321' => true, '44' => 10 }
+      result.should == result_hash
+    end
+    
+  end
 
 end

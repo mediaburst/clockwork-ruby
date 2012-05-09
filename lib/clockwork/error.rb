@@ -9,12 +9,12 @@ module Clockwork
     end
   
     # @author James Inman <james@mediaburst.co.uk>
-    # Raised for all error codes not otherwise specified
+    # Raised for all error codes not otherwise specified.
     class Generic < StandardError
     end
   
     # @author James Inman <james@mediaburst.co.uk>
-    # Raised if a HTTP connection to the API fails
+    # Raised if a HTTP connection to the API fails.
     class HTTP < StandardError
     end
   

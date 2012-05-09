@@ -28,18 +28,23 @@ module Clockwork
     # @return [symbol] One of +error+, +:replace+, +:remove+ 
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_reader :invalid_char_action
-    
-    # If Clockwork::API#long is set to +true+, this is the number of messages to concatenate (join together). 
-    # @raise ArgumentError - if a value less than 2 or more than 3 is passed
-    # @return [symbol] One of +error+, +:replace+, +:remove+ 
-    # @note Defaults to 3 if not set and Clockwork::API#long is set to +true+.
-    attr_reader :messages_to_concat
         
     # @!attribute long
     # Set to +true+ to enable long SMS. A standard text can contain 160 characters, a long SMS supports up to 459. Each recipient will cost up to 3 message credits.
     # @return [boolean]
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
     attr_accessor :long
+    
+    # @!attribute messages
+    # Returns a Clockwork::MessageCollection containing all built SMS messages.
+    # @return [Clockwork::MessageCollection]
+    attr_reader :messages
+    
+    # If Clockwork::API#long is set to +true+, this is the number of messages to concatenate (join together). 
+    # @raise ArgumentError - if a value less than 2 or more than 3 is passed
+    # @return [symbol] One of +error+, +:replace+, +:remove+ 
+    # @note Defaults to 3 if not set and Clockwork::API#long is set to +true+.
+    attr_reader :messages_to_concat
     
     # Password provided in Clockwork::API#initialize.
     # @return [string]
@@ -115,6 +120,7 @@ module Clockwork
       
       @use_ssl = true if @use_ssl.nil?
       @concat = 3 if @concat.nil? && @long
+      @messages ||= Clockwork::MessageCollection.new( :api => self )
     end
     
     # Check the remaining credit for this account.
@@ -122,23 +128,12 @@ module Clockwork
     # @return [integer] Number of messages remaining    
     def credit
       xml = Clockwork::XML::Credit.build( self )
-      response = Clockwork::HTTP.post( CREDIT_URL, xml, @use_ssl )
+      response = Clockwork::HTTP.post( Clockwork::API::CREDIT_URL, xml, @use_ssl )
       credit = Clockwork::XML::Credit.parse( response )
     end
     
-    # Alias for Clockwork::API#messages_to_concat to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::API#messages_to_concat instead. Support for Clockwork::API#concat will be removed in a future version of this wrapper.
-
-    def concat
-      messages_to_concat
-    end
-    
-    
-    
-    
-    
     # Alias for Clockwork::SMS#deliver to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::SMS#deliver. Support for Clockwork::API#send_message will be removed in a future version of this wrapper.  
+    # @deprecated Use Clockwork::SMS#deliver. Support for Clockwork::API#send_message will be removed in a future version of this wrapper. Besides, you get a MUCH more useful return value using #deliver: a Clockwork::SMS::Response.
     # @overload send_message(number, message, options)
     #   @param [string] number The phone number to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890).
     #   @param [string] message The message content to send.
@@ -147,8 +142,39 @@ module Clockwork
     #   @param [array] numbers Array of string phone numbers to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890).
     #   @param [string] message The message content to send.
     #   @param [hash] options Optional hash of attributes on Clockwork::SMS 
-    # @return [hash] Hash in the format "phone number" => true on success, or "phone number" => error_number on failure.
+    # @return [hash] Hash in the format "phone number" => true on success, or "phone number" => error_code on failure.
     def send_message *args
+      result = {}
+      
+      options = {}
+      options = args[2] if args[2].kind_of?(Hash)
+      
+      # TODO: Make this do a transactional send if we're sending multiple messages
+      if args[0].kind_of?(Array)
+        args[0].each do |number|        
+          sms = self.messages.build( options )
+          sms.to = number
+          sms.message = args[1]        
+          response = sms.deliver
+          if response.success
+            result["#{sms.to}"] = true
+          else
+            result["#{sms.to}"] = response.error_code
+          end
+        end
+      elsif args[0].kind_of?(String)        
+        sms = self.messages.build( options )
+        sms.to = args[0]
+        sms.message = args[1]        
+        response = sms.deliver
+        if response.success
+          result["#{sms.to}"] = true
+        else
+          result["#{sms.to}"] = response.error_code
+        end
+      end
+      
+      result      
     end
     
   end
