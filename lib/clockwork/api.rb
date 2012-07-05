@@ -16,6 +16,12 @@ module Clockwork
     # API key provided in Clockwork::API#initialize.
     # @return [string] 
     attr_reader :api_key
+    
+    # This is the number of messages to concatenate (join together). 
+    # @raise ArgumentError - if a value less than 2 or more than 3 is passed
+    # @return [symbol] One of +error+, +:replace+, +:remove+ 
+    # @note Defaults to 3 if not set and Clockwork::API#long is set to +true+.
+    attr_reader :concat
         
     # @!attribute from
     # The from address displayed on a phone when the SMS is received. This can be either a 12 digit number or 11 characters long.
@@ -40,12 +46,6 @@ module Clockwork
     # @return [Clockwork::MessageCollection]
     attr_reader :messages
     
-    # If Clockwork::API#long is set to +true+, this is the number of messages to concatenate (join together). 
-    # @raise ArgumentError - if a value less than 2 or more than 3 is passed
-    # @return [symbol] One of +error+, +:replace+, +:remove+ 
-    # @note Defaults to 3 if not set and Clockwork::API#long is set to +true+.
-    attr_reader :messages_to_concat
-    
     # Password provided in Clockwork::API#initialize.
     # @return [string]
     # @deprecated Use api_key instead.
@@ -67,18 +67,6 @@ module Clockwork
     # @deprecated Use api_key instead.
     attr_reader :username
         
-    # Alias for Clockwork::API#messages_to_concat to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::API#messages_to_concat instead. Support for Clockwork::API#concat will be removed in a future version of this wrapper.
-    def concat
-      messages_to_concat
-    end
-          
-    # Alias for Clockwork::API#messages_to_concat= to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::API#messages_to_concat= instead. Support for Clockwork::API#concat= will be removed in a future version of this wrapper.
-    def concat= val
-      messages_to_concat val
-    end
-         
     # Alias for Clockwork::API#credit to preserve backwards compatibility with original Mediaburst API.
     # @deprecated Use Clockwork::API#credit. Support for Clockwork::API#get_credit will be removed in a future version of this wrapper.
     def get_credit
@@ -89,7 +77,7 @@ module Clockwork
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
     end
     
-    def messages_to_concat= number
+    def concat= number
       raise( ArgumentError, "#{number} must be either 2 or 3" ) unless [2, 3].include?(number.to_i)
     end
     
@@ -149,7 +137,6 @@ module Clockwork
       options = {}
       options = args[2] if args[2].kind_of?(Hash)
       
-      # TODO: Make this do a transactional send if we're sending multiple messages
       if args[0].kind_of?(Array)
         args[0].each do |number|        
           sms = self.messages.build( options )
@@ -182,7 +169,7 @@ module Clockwork
     
     # Deliver multiple messages created using Clockwork::API#messages.build.
     # @return [array] Array of Clockwork::SMS::Response objects for messages.    
-    def deliver_messages
+    def deliver
       xml = Clockwork::XML::SMS.build_multiple( self.messages )
       http_response = Clockwork::HTTP.post( Clockwork::API::SMS_URL, xml, @use_ssl )
       responses = Clockwork::XML::SMS.parse_multiple( self.messages, http_response )
