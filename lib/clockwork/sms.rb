@@ -48,6 +48,8 @@ module Clockwork
     # @return [string]
     attr_accessor :to
     
+    attr_writer :wrapper_id
+    
     def invalid_char_action= symbol
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
     end    
@@ -78,6 +80,7 @@ module Clockwork
       translations << { :var => 'content', :xml_var => 'Content' }
       translations << { :var => 'to', :xml_var => 'To' }
       translations << { :var => 'truncate', :xml_var => 'Truncate' }
+      translations << { :var => 'wrapper_id', :xml_var => 'WrapperID' }
       
       translations.each do |t|
         self.instance_variable_set( "@#{t[:var]}", @api.instance_variable_get( "@#{t[:var]}" ) ) if self.instance_variable_get( "@#{t[:var]}" ).nil?

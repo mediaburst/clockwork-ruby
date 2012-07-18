@@ -120,53 +120,6 @@ module Clockwork
       credit = Clockwork::XML::Credit.parse( response )
     end
     
-    # Alias for Clockwork::SMS#deliver to preserve backwards compatibility with original Mediaburst API.
-    # @deprecated Use Clockwork::SMS#deliver. Support for Clockwork::API#send_message will be removed in a future version of this wrapper. Besides, you get a MUCH more useful return value using #deliver: a Clockwork::SMS::Response.
-    # @overload send_message(number, message, options)
-    #   @param [string] number The phone number to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890).
-    #   @param [string] message The message content to send.
-    #   @param [hash] options Optional hash of attributes on Clockwork::SMS 
-    # @overload send_message(numbers, message, options)
-    #   @param [array] numbers Array of string phone numbers to send the SMS to in international number format (without a leading + or international dialling prefix such as 00, e.g. 441234567890).
-    #   @param [string] message The message content to send.
-    #   @param [hash] options Optional hash of attributes on Clockwork::SMS 
-    # @return [hash] Hash in the format "phone number" => true on success, or "phone number" => error_code on failure.
-    def send_message *args
-      result = {}
-      
-      options = {}
-      options = args[2] if args[2].kind_of?(Hash)
-      
-      if args[0].kind_of?(Array)
-        args[0].each do |number|        
-          sms = self.messages.build( options )
-          sms.to = number
-          sms.content = args[1]
-        end
-        responses = self.deliver_messages
-        responses.each do |response|
-          if response.success
-            result["#{response.message.to}"] = true
-          else
-            result["#{response.message.to}"] = response.error_code
-          end
-        end
-        
-      elsif args[0].kind_of?(String)        
-        sms = self.messages.build( options )
-        sms.to = args[0]
-        sms.content = args[1]        
-        response = sms.deliver
-        if response.success
-          result["#{sms.to}"] = true
-        else
-          result["#{sms.to}"] = response.error_code
-        end
-      end
-      
-      result      
-    end
-    
     # Deliver multiple messages created using Clockwork::API#messages.build.
     # @return [array] Array of Clockwork::SMS::Response objects for messages.    
     def deliver

@@ -102,7 +102,7 @@ module Clockwork
             response.error_code = sms_response.css('ErrNo').inner_html.to_i
             response.error_description = sms_response.css('ErrDesc').inner_html
           end
-          responses << response
+          responses[sms_response.css('WrapperID').inner_html.to_i] = response
         end
         
         responses

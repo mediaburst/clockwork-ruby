@@ -55,9 +55,9 @@ For more information on the available optional parameters for each SMS (Clockwor
         puts response.error_description
     end
     
-### Send multiple SMS messages with an optional client ID
+### Send multiple SMS messages (with an optional client ID)
 
-You should not use the `deliver` method for each message, but instead use the `Clockwork::API#deliver_messages` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed faster.
+You should not use the `Clockwork::Message#deliver` method for each message, but instead use the `Clockwork::API#deliver` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed significantly faster.
 
     messages = [
         { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -91,10 +91,6 @@ You should not use the `deliver` method for each message, but instead use the `C
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
     remaining_messages = Clockwork::API.credit
     puts remaining messages # => 240
-    
-## Notes
-
-**Backwards Compatibility:** This API is entirely backwards compatible with the legacy *ruby-mediaburst-sms* gem - simply replace 'Mediaburst' with 'Clockwork' in your code that uses the library. However, we strongly recommend you update your code to use the above examples.
 
 ## License
 

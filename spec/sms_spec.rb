@@ -66,7 +66,7 @@ describe "SMS" do
         api.messages.build(m)
       end
 
-      responses = api.deliver_messages
+      responses = api.deliver
       
       responses.count.should == 7
       responses.first.success.should == true
