@@ -1,7 +1,7 @@
 require 'rake'
 
 Gem::Specification.new do |s|
-  s.name = "clockwork"
+  s.name = "clockworksms"
   s.version = "1.0.0"
   s.author = "Mediaburst"
   s.email = "hello@mediaburst.co.uk"

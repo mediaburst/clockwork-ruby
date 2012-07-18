@@ -2,7 +2,9 @@
 
 ## Install
 
-No gem is available yet, use the files directly by including them in your Ruby project.
+Just add the following to your Gemfile:
+
+    gem 'clockworksms'
 
 ## Documentation
 
