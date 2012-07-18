@@ -2,7 +2,7 @@
 module Clockwork
     
   # Current API wrapper version
-  VERSION = 'DEV'
+  VERSION = '1.0.0'
   
   # @author James Inman <james@mediaburst.co.uk>
   # You must create an instance of Clockwork::API to begin using the API.

@@ -1,14 +1,4 @@
-# Clockwork SMS API Wrapper for Ruby
-
-# IMPORTANT
-
-Don't use this wrapper yet, it will not work until after the next Mediaburst SMS API release.
-
-This README will be updated once that release has happened.
-
-Still to do:
-* Split-testing for more than 500 messages
-* Net::HTTP::Proxy settings
+# Clockwork SMS API Ruby Gem
 
 ## Install
 
