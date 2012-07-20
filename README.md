@@ -103,9 +103,7 @@ and submit a pull request. Please add RSpec tests for your use case.
 
 First, create a file at spec/spec_authentication_details containing the following:
 
-    34023ada3ec0d99213f91a12a2329ba932665ed7
-    MyLegacyAPIUsername@mydomain.com
-    MyPassword
+    YOUR_API_KEY_HERE
     
 Substitute your own API key, username and password on lines 1, 2, and 3 of the file.
 

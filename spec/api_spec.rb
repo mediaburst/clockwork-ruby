@@ -3,8 +3,6 @@ require File.join( File.dirname(__FILE__) + "/spec_helper" )
 describe "API" do
   
   let(:test_api_key) { IO.read( File.join( File.dirname(__FILE__) + "/spec_authentication_details" ) ).split("\n")[0] }
-  let(:test_username) { IO.read( File.join( File.dirname(__FILE__) + "/spec_authentication_details" ) ).split("\n")[1] }
-  let(:test_password) { IO.read( File.join( File.dirname(__FILE__) + "/spec_authentication_details" ) ).split("\n")[2] }
   
   describe "#initialize" do
 
@@ -31,19 +29,6 @@ describe "API" do
       api.api_key.should == 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875'
     end
   
-    it "should raise an ArgumentError if two paramters are passed but either username or password is blank" do
-      expect { Clockwork::API.new('username', '') }.to raise_error ArgumentError
-      expect { Clockwork::API.new('password', '') }.to raise_error ArgumentError
-      expect { Clockwork::API.new('', '') }.to raise_error ArgumentError
-    end
-  
-    it "should return a valid instance of Clockwork::API if a valid username and password are passed" do
-      api = Clockwork::API.new 'username', 'password'
-      api.should be_a_kind_of Clockwork::API
-      api.username.should == 'username'
-      api.password.should == 'password'
-    end
-  
     it "should raise an ArgumentError if more than three parameters are passed" do
       expect { Clockwork::API.new('', '', '') }.to raise_error ArgumentError
     end
@@ -53,14 +38,6 @@ describe "API" do
       api.from.should == "A Test"
       api.long.should == true
       api.truncate.should == true
-      api.invalid_char_action.should == :remove
-    end
-  
-    it "should set options if a parameters hash is passed along with the username and password" do
-      api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875', { :from => 'A Test', :long => false, :truncate => false, :invalid_char_action => :remove }
-      api.from.should == "A Test"
-      api.long.should == false
-      api.truncate.should == false
       api.invalid_char_action.should == :remove
     end
 
@@ -86,20 +63,10 @@ describe "API" do
 
   describe "#credit" do
     
-    it "should return the number of messages remaining with a valid username and password" do
-      api = Clockwork::API.new test_username, test_password
-      api.credit.should be > 0
-    end
-  
     it "should return the number of messages remaining with an API key" do
       api = Clockwork::API.new test_api_key
       api.credit.should be > 0
     end  
-    
-    it "should raise an error with an invalid username and password" do
-      api = Clockwork::API.new 'username', 'password'
-      expect { api.credit }.to raise_error Clockwork::Error::Authentication
-    end
     
     it "should raise an error with an invalid API key" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
@@ -109,11 +76,6 @@ describe "API" do
   end
 
   describe "#get_credit" do
-  
-    it "should return the number of messages remaining with a valid username and password" do
-      api = Clockwork::API.new test_username, test_password
-      api.get_credit.should be > 0
-    end
   
     it "should return the number of messages remaining with an API key" do
       api = Clockwork::API.new test_api_key
@@ -125,11 +87,6 @@ describe "API" do
       api.use_ssl = false
       api.get_credit.should be > 0
     end      
-    
-    it "should raise an error with an invalid username and password" do
-      api = Clockwork::API.new 'username', 'password'
-      expect { api.get_credit }.to raise_error Clockwork::Error::Authentication
-    end
     
     it "should raise an error with an invalid API key" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
