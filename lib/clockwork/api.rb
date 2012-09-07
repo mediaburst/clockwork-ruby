@@ -2,7 +2,7 @@
 module Clockwork
     
   # Current API wrapper version
-  VERSION = '1.0.0'
+  VERSION = '1.1.0'
   
   # @author James Inman <james@mediaburst.co.uk>
   # You must create an instance of Clockwork::API to begin using the API.
@@ -11,7 +11,9 @@ module Clockwork
     # URL of the SMS API send action
     SMS_URL = "api.clockworksms.com/xml/send"
     # URL of the SMS API check credit action
-    CREDIT_URL = "api.clockworksms.com/xml/credit"    
+    CREDIT_URL = "api.clockworksms.com/xml/credit"   
+    # URL of the SMS API check balance action
+    BALANCE_URL = "api.clockworksms.com/xml/balance"    
     
     # API key provided in Clockwork::API#initialize.
     # @return [string] 
@@ -118,6 +120,15 @@ module Clockwork
       xml = Clockwork::XML::Credit.build( self )
       response = Clockwork::HTTP.post( Clockwork::API::CREDIT_URL, xml, @use_ssl )
       credit = Clockwork::XML::Credit.parse( response )
+    end
+    
+    # Check the remaining credit for this account.
+    # @raise Clockwork::Error::Authentication - if API login details are incorrect
+    # @return [integer] Number of messages remaining    
+    def balance
+      xml = Clockwork::XML::Balance.build( self )
+      response = Clockwork::HTTP.post( Clockwork::API::BALANCE_URL, xml, @use_ssl )
+      balance = Clockwork::XML::Balance.parse( response )
     end
     
     # Deliver multiple messages created using Clockwork::API#messages.build.

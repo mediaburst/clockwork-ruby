@@ -77,12 +77,12 @@ You should not use the `Clockwork::Message#deliver` method for each message, but
         end
     end
     
-### Check credit
+### Check balance
     
     require 'clockwork'
     api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    remaining_messages = Clockwork::API.credit
-    puts remaining messages # => 240
+    balance = Clockwork::API.balance
+    puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
 
 ## License
 
@@ -105,7 +105,7 @@ First, create a file at spec/spec_authentication_details containing the followin
 
     YOUR_API_KEY_HERE
     
-Substitute your own API key, username and password on lines 1, 2, and 3 of the file.
+Substitute your own API key on line 1 of the file and replace the telephone numbers in the spec files with your own.
 
 Then, run `rspec`. 
 
@@ -115,3 +115,13 @@ Then, run `rspec`.
 [4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
 [5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS
 [6]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS/Response
+
+## Changelog
+
+### 1.0.0 (18th July, 2012)
+
+* Initial release of wrapper [JI]
+
+### 1.1.0 (10th September, 2012)
+
+* API#credit is now deprecated: use API#balance instead.

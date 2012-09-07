@@ -72,26 +72,38 @@ describe "API" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
       expect { api.credit }.to raise_error Clockwork::Error::Generic
     end
-  
-  end
-
-  describe "#get_credit" do
-  
-    it "should return the number of messages remaining with an API key" do
-      api = Clockwork::API.new test_api_key
-      api.get_credit.should be > 0
-    end
     
     it "should return the number of messages remaining over standard HTTP" do
       api = Clockwork::API.new test_api_key
       api.use_ssl = false
-      api.get_credit.should be > 0
+      api.credit.should be > 0
     end      
+  
+  end
+  
+  describe "#balance" do
+    
+    it "should return the balance remaining with an API key" do
+      api = Clockwork::API.new test_api_key
+      balance = api.balance
+      balance.should have_key :account_type
+      balance.should have_key :balance
+      balance.should have_key :currency
+    end  
     
     it "should raise an error with an invalid API key" do
       api = Clockwork::API.new 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1'
-      expect { api.get_credit }.to raise_error Clockwork::Error::Generic
+      expect { api.balance }.to raise_error Clockwork::Error::Generic
     end
+    
+    it "should return the balance over standard HTTP" do
+      api = Clockwork::API.new test_api_key
+      api.use_ssl = false
+      balance = api.balance
+      balance.should have_key :account_type
+      balance.should have_key :balance
+      balance.should have_key :currency
+    end      
   
   end
 
