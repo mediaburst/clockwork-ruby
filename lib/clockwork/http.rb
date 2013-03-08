@@ -12,7 +12,7 @@ module Clockwork
       # @param [boolean] use_ssl Whether to use SSL when making the request.
       # @return [string] XML data
       def post url, data = '', use_ssl = true
-        url = use_ssl? ? "https://#{url}" : "http://#{url}"
+        url = use_ssl ? "https://#{url}" : "http://#{url}"
         uri = URI.parse url
 
         connection.post do |req|
@@ -27,7 +27,7 @@ module Clockwork
 
       def connection
         Faraday.new(:url => 'http://sushi.com') do |faraday|
-          faraday.response :logger                  # log requests to STDOUT
+          #faraday.response :logger                  # log requests to STDOUT
           faraday.adapter  adapter
         end
       end
