@@ -12,18 +12,23 @@ module Clockwork
       # @param [boolean] use_ssl Whether to use SSL when making the request.
       # @return [string] XML data
       def post url, data = '', use_ssl = true
-        url = use_ssl ? "https://#{url}" : "http://#{url}"
-        uri = URI.parse url
-
         connection.post do |req|
-          req.url uri
-          req.headers['Content-Type'] = 'text/xml'
-          req.headers["User-Agent"]   =  "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
+          req.url uri_from url, use_ssl
+
+          req.headers["Content-Type"] = "text/xml"
+          req.headers["User-Agent"]   = "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
+
           req.body = data
         end
       end
 
       private
+
+      def uri_from(url, use_ssl)
+        protocol = use_ssl ? "https" : "http"
+
+        URI.parse "#{protocol}://#{url}"
+      end
 
       def connection
         Faraday.new do |faraday|
