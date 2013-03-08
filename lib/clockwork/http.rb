@@ -4,7 +4,7 @@ module Clockwork
   class HTTP
 
     class << self
-      attr_writer :adapter
+      attr_writer :adapter, :connection
 
       # Build a HTTP POST request.
       # @param [string] url URL to POST to
@@ -31,7 +31,7 @@ module Clockwork
       end
 
       def connection
-        Faraday.new do |faraday|
+        @connection ||= Faraday.new do |faraday|
           faraday.adapter adapter
         end
       end
