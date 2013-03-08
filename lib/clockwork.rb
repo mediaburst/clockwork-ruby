@@ -4,7 +4,6 @@ $LOAD_PATH.unshift lib_dir unless $LOAD_PATH.include?(lib_dir)
 require 'net/http'
 require 'faraday'
 require 'nokogiri'
-require 'ruby-debug'
 
 require 'clockwork/error'
 require 'clockwork/http'
