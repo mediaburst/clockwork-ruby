@@ -1,40 +1,41 @@
 module Clockwork
-
   # @author James Inman <james@mediaburst.co.uk>
   # Wrapper around NET/HTTP
   class HTTP
 
-    # Build a HTTP POST request.
-    # @param [string] url URL to POST to
-    # @param [string] data Body of the POST request.
-    # @param [boolean] use_ssl Whether to use SSL when making the request.
-    # @return [string] XML data
-    def self.post url, data = '', use_ssl = true
-      if use_ssl
-        uri = URI.parse "https://#{url}"
-        req = Net::HTTP::Post.new( uri.path )
+    class << self
+      attr_writer :adapter
 
-        socket = Net::HTTP.new( uri.host, uri.port )
-        socket.use_ssl = true
-        socket.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      else
-        uri = URI.parse "http://#{url}"
-        req = Net::HTTP::Post.new( uri.path )
+      # Build a HTTP POST request.
+      # @param [string] url URL to POST to
+      # @param [string] data Body of the POST request.
+      # @param [boolean] use_ssl Whether to use SSL when making the request.
+      # @return [string] XML data
+      def post url, data = '', use_ssl = true
+        url = use_ssl? ? "https://#{url}" : "http://#{url}"
+        uri = URI.parse url
 
-        socket = Net::HTTP.new( uri.host, uri.port )
+        connection.post do |req|
+          req.url uri
+          req.headers['Content-Type'] = 'text/xml'
+          req.headers["User-Agent"]   =  "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
+          req.body = data
+        end
       end
 
-      req.content_type = "text/xml"
-      req.body = data
-      req.add_field "User-Agent", "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
+      private
 
-      response = socket.start do |http|
-        http.request( req )
+      def connection
+        Faraday.new(:url => 'http://sushi.com') do |faraday|
+          faraday.response :logger                  # log requests to STDOUT
+          faraday.adapter  adapter
+        end
       end
 
-      response
+      def adapter
+        @adapter ||= Faraday.default_adapter
+      end
     end
-
   end
 
 end
