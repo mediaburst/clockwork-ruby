@@ -26,9 +26,8 @@ module Clockwork
       private
 
       def connection
-        Faraday.new(:url => 'http://sushi.com') do |faraday|
-          #faraday.response :logger                  # log requests to STDOUT
-          faraday.adapter  adapter
+        Faraday.new do |faraday|
+          faraday.adapter adapter
         end
       end
 
