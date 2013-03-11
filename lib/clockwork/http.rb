@@ -4,7 +4,7 @@ module Clockwork
   class HTTP
 
     class << self
-      attr_writer :adapter, :connection
+      attr_accessor :adapter, :connection
 
       # Build a HTTP POST request.
       # @param [string] url URL to POST to
