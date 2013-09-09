@@ -1,9 +1,8 @@
 require File.join( File.dirname(__FILE__) + "/spec_helper" )
 
 describe "SMS" do
-  
   let(:test_api_key) { IO.read( File.join( File.dirname(__FILE__) + "/spec_authentication_details" ) ).split("\n")[0] }
-  
+
   describe "#initialize" do
 
     it "should set options if a parameters hash is passed" do
@@ -15,41 +14,41 @@ describe "SMS" do
     end
 
   end
-  
+
   describe "#deliver" do
-    
+
     it "should accept a single phone number and a message parameter" do
       api = Clockwork::API.new test_api_key
       message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
       response = message.deliver
-      
+
       response.should be_an_instance_of Clockwork::SMS::Response
       response.success.should == true
       response.message_id.should_not be_empty
     end
-    
+
     it "should not send a blank message" do
       api = Clockwork::API.new test_api_key
       message = api.messages.build( :to => '441234123456', :content => '' )
       response = message.deliver
-      
+
       response.should be_an_instance_of Clockwork::SMS::Response
       response.success.should == false
       response.message_id.should be_nil
       response.error_code.should == 7
     end
-    
+
     it "should accept additional parameters" do
       api = Clockwork::API.new test_api_key
       message = api.messages.build( :to => '441234123456', :content => 'This is a test message.', :client_id => 'message123' )
       response = message.deliver
-      
+
       response.should be_an_instance_of Clockwork::SMS::Response
       response.success.should == true
       response.message_id.should_not be_empty
       response.message.client_id.should == 'message123'
     end
-    
+
     it "should allow delivering multiple messages" do
       messages = [
           { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
@@ -67,14 +66,14 @@ describe "SMS" do
       end
 
       responses = api.deliver
-      
+
       responses.count.should == 7
       responses.first.success.should == true
-      
+
       responses.last.success.should == false
       responses.last.error_code.should == 10
     end
-    
+
   end
-  
+
 end

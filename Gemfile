@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'nokogiri'
-gem 'faraday'
-
 group :development do
-  gem 'rake'
-  gem 'rspec'
+  gem 'license_finder'
 end
+
+# Specify your gem's dependencies in clockwork.gemspec
+gemspec :name => 'shutl_clockwork'
