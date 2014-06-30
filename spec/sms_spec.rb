@@ -8,10 +8,10 @@ describe "SMS" do
 
     it "should set options if a parameters hash is passed" do
       sms = Clockwork::SMS.new( :from => 'A Test', :long => true, :truncate => true, :invalid_char_action => :remove )
-      sms.from.should == "A Test"
-      sms.long.should == true
-      sms.truncate.should == true
-      sms.invalid_char_action.should == :remove
+      expect(sms.from).to match("A Test")
+      expect(sms.long).to be(true)
+      expect(sms.truncate).to be(true)
+      expect(sms.invalid_char_action).to be(:remove)
     end
 
   end
@@ -23,9 +23,9 @@ describe "SMS" do
       message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
       response = message.deliver
       
-      response.should be_an_instance_of Clockwork::SMS::Response
-      response.success.should == true
-      response.message_id.should_not be_empty
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(true)
+      expect(response.message_id).not_to be_empty
     end
     
     it "should not send a blank message" do
@@ -33,10 +33,10 @@ describe "SMS" do
       message = api.messages.build( :to => '441234123456', :content => '' )
       response = message.deliver
       
-      response.should be_an_instance_of Clockwork::SMS::Response
-      response.success.should == false
-      response.message_id.should be_nil
-      response.error_code.should == 7
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(false)
+      expect(response.message_id).to be_nil
+      expect(response.error_code).to be(7)
     end
     
     it "should accept additional parameters" do
@@ -44,10 +44,10 @@ describe "SMS" do
       message = api.messages.build( :to => '441234123456', :content => 'This is a test message.', :client_id => 'message123' )
       response = message.deliver
       
-      response.should be_an_instance_of Clockwork::SMS::Response
-      response.success.should == true
-      response.message_id.should_not be_empty
-      response.message.client_id.should == 'message123'
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(true)
+      expect(response.message_id).not_to be_empty
+      expect(response.message.client_id).to match('message123')
     end
     
     it "should allow delivering multiple messages" do
@@ -68,11 +68,11 @@ describe "SMS" do
 
       responses = api.deliver
       
-      responses.count.should == 7
-      responses.first.success.should == true
+      expect(responses.count).to be(7)
+      expect(responses.first.success).to be(true)
       
-      responses.last.success.should == false
-      responses.last.error_code.should == 10
+      expect(responses.last.success).to be(false)
+      expect(responses.last.error_code).to be(10)
     end
     
   end

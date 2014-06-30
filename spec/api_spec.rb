@@ -25,8 +25,8 @@ describe "API" do
   
     it "should return a valid instance of Clockwork::API if a valid format of API key is passed" do
       api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875'
-      api.should be_a_kind_of Clockwork::API
-      api.api_key.should == 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875'
+      expect(api).to be_a_kind_of Clockwork::API
+      expect(api.api_key).to match('af7a8f7a8fa7f8a76fa876fa876a876fa875a875')
     end
   
     it "should raise an ArgumentError if more than three parameters are passed" do
@@ -35,10 +35,10 @@ describe "API" do
   
     it "should set options if a parameters hash is passed along with the API key" do
       api = Clockwork::API.new 'af7a8f7a8fa7f8a76fa876fa876a876fa875a875', { :from => 'A Test', :long => true, :truncate => true, :invalid_char_action => :remove }
-      api.from.should == "A Test"
-      api.long.should == true
-      api.truncate.should == true
-      api.invalid_char_action.should == :remove
+      expect(api.from).to match('A Test')
+      expect(api.long).to be(true)
+      expect(api.truncate).to be(true)
+      expect(api.invalid_char_action).to be(:remove)
     end
 
   end
@@ -51,12 +51,12 @@ describe "API" do
       expect { api.invalid_char_action = 'ERROR' }.to raise_error ArgumentError
     
       # Allow strings, too...
-      expect { api.invalid_char_action = 'error' }.to_not raise_error ArgumentError   
+      expect { api.invalid_char_action = 'error' }.not_to raise_error   
     
       # Allowed values
-      expect { api.invalid_char_action = :error }.to_not raise_error ArgumentError    
-      expect { api.invalid_char_action = :replace }.to_not raise_error ArgumentError
-      expect { api.invalid_char_action = :remove }.to_not raise_error ArgumentError
+      expect { api.invalid_char_action = :error }.not_to raise_error    
+      expect { api.invalid_char_action = :replace }.not_to raise_error
+      expect { api.invalid_char_action = :remove }.not_to raise_error
     end
 
   end
@@ -65,7 +65,7 @@ describe "API" do
     
     it "should return the number of messages remaining with an API key" do
       api = Clockwork::API.new test_api_key
-      api.credit.should be > 0
+      expect(api.credit).to be > 0
     end  
     
     it "should raise an error with an invalid API key" do
@@ -76,7 +76,7 @@ describe "API" do
     it "should return the number of messages remaining over standard HTTP" do
       api = Clockwork::API.new test_api_key
       api.use_ssl = false
-      api.credit.should be > 0
+      expect(api.credit).to be > 0
     end      
   
   end
@@ -86,9 +86,9 @@ describe "API" do
     it "should return the balance remaining with an API key" do
       api = Clockwork::API.new test_api_key
       balance = api.balance
-      balance.should have_key :account_type
-      balance.should have_key :balance
-      balance.should have_key :currency
+      expect(balance).to include(:account_type)
+      expect(balance).to include(:balance)
+      expect(balance).to include(:currency)
     end  
     
     it "should raise an error with an invalid API key" do
@@ -100,9 +100,9 @@ describe "API" do
       api = Clockwork::API.new test_api_key
       api.use_ssl = false
       balance = api.balance
-      balance.should have_key :account_type
-      balance.should have_key :balance
-      balance.should have_key :currency
+      expect(balance).to include(:account_type)
+      expect(balance).to include(:balance)
+      expect(balance).to include(:currency)
     end      
   
   end
