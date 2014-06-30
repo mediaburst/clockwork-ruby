@@ -28,7 +28,7 @@ module Clockwork
     # @see Clockwork::SMS 
     # Create a new instance of Clockwork::SMS in this MessageCollection.
     def build params = {}
-      sms = Clockwork::SMS.new({ api: @api }.merge(params))
+      sms = Clockwork::SMS.new({:api => @api}.merge(params))
       sms.wrapper_id = @messages.count
       @messages << sms
       sms
