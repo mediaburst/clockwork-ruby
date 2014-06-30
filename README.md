@@ -1,5 +1,5 @@
 # Clockwork SMS API Ruby Gem
-
+[![Gem Version](https://badge.fury.io/rb/clockworksms.svg)](http://badge.fury.io/rb/clockworksms)
 ## Install
 
 Just add the following to your Gemfile:
@@ -131,4 +131,5 @@ Then, run `rspec`.
 
 ### 1.2.0 (30th June, 2014)
 
-* Compatability fixes for Ruby 1.8, 2.0 and 2.1 (Tested with 1.8.7-p375, 1.9.3-p547, 2.0.0-p481 and 2.1.2)
+* Compatability fixes for Ruby 1.8, 2.0 and 2.1 (Tested with 1.8.7-p375, 1.9.3-p547, 2.0.0-p481 and 2.1.2).
+Thanks to [Paul Volpato](https://github.com/volpe), [Todd Bealmear](https://github.com/todd) and [Fawad](https://github.com/fawad) for the pull requests.
