@@ -3,6 +3,7 @@ $LOAD_PATH.unshift lib_dir unless $LOAD_PATH.include?(lib_dir)
 
 require 'net/http'
 require 'net/https'
+require 'openssl'
 require 'nokogiri'
 
 require 'clockwork/error'
