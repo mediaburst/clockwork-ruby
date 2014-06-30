@@ -86,7 +86,7 @@ You should not use the `Clockwork::Message#deliver` method for each message, but
 
 ## License
 
-This project is licensed under the ISC open-source license.
+This project is licensed under the MIT open-source license.
 
 A copy of this license can be found in LICENSE.
 
@@ -98,6 +98,8 @@ The project is hosted on GitHub at [http://www.github.com/mediaburst/clockwork-r
 
 If you would like to contribute a bug fix or improvement please fork the project 
 and submit a pull request. Please add RSpec tests for your use case.
+
+If we don't respond to your bug report or pull request within a few days please email [hello@clockworksms.com][2] or remind [@ClockworkSMS on Twitter][7], we probably haven't spotted the notification.
 
 ### Test Setup
 
@@ -115,6 +117,7 @@ Then, run `rspec`.
 [4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
 [5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS
 [6]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS/Response
+[7]: http://twitter.com/ClockworkSMS
 
 ## Changelog
 
@@ -125,3 +128,7 @@ Then, run `rspec`.
 ### 1.1.0 (10th September, 2012)
 
 * API#credit is now deprecated: use API#balance instead.
+
+### 1.2.0 (30th June, 2014)
+
+* Compatability fixes for Ruby 1.8, 2.0 and 2.1 (Tested with 1.8.7-p375, 1.9.3-p547, 2.0.0-p481 and 2.1.2)
