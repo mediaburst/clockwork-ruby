@@ -18,71 +18,80 @@ For more information on the available optional parameters for each SMS (Clockwor
 
 ### Send a single SMS message
 
-    require 'clockwork'
-    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
-    response = message.deliver
+```ruby
+require 'clockwork'
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
+response = message.deliver
     
-    if response.success
-        puts response.message_id
-    else
-        puts response.error_code
-        puts response.error_description
-    end
-    
+if response.success
+    puts response.message_id
+else
+    puts response.error_code
+    puts response.error_description
+end
+```
+
 ### Alternative usage for sending an SMS message
 
-    require 'clockwork'
-    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+```ruby
+require 'clockwork'
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
     
-    message = api.messages.build
-    message.to = '441234123456'
-    message.content = 'This is a test message.'
-    response = message.deliver
-    
-    if response.success
-        puts response.message_id
-    else
-        puts response.error_code
-        puts response.error_description
-    end
-    
+message = api.messages.build
+message.to = '441234123456'
+message.content = 'This is a test message.'
+response = message.deliver
+
+if response.success
+    puts response.message_id
+else
+    puts response.error_code
+    puts response.error_description
+end
+```
+
 ### Send multiple SMS messages (with an optional client ID)
 
 You should not use the `Clockwork::Message#deliver` method for each message, but instead use the `Clockwork::API#deliver` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed significantly faster.
 
-    messages = [
-        { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
-        { :to => '441234123456', :content => 'This is a test message 2.', :client_id => '2' },
-        { :to => '441234123456', :content => 'This is a test message 3.', :client_id => '3' },
-        { :to => '441234123456', :content => 'This is a test message 4.', :client_id => '4' },
-        { :to => '441234123456', :content => 'This is a test message 5.', :client_id => '5' },
-        { :to => '441234123456', :content => 'This is a test message 6.', :client_id => '6' }
-    ]
-    
-    require 'clockwork'
-    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    messages.each do |m|
-        api.messages.build(m)
+```ruby
+
+messages = [
+    { :to => '441234123456', :content => 'This is a test message.', :client_id => '1' },
+    { :to => '441234123456', :content => 'This is a test message 2.', :client_id => '2' },
+    { :to => '441234123456', :content => 'This is a test message 3.', :client_id => '3' },
+    { :to => '441234123456', :content => 'This is a test message 4.', :client_id => '4' },
+    { :to => '441234123456', :content => 'This is a test message 5.', :client_id => '5' },
+    { :to => '441234123456', :content => 'This is a test message 6.', :client_id => '6' }
+]
+
+require 'clockwork'
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+messages.each do |m|
+    api.messages.build(m)
+end
+
+responses = api.deliver_messages
+responses.each do |response|
+    puts response.client_id
+    if response.success
+        puts response.message_id
+    else
+        puts response.error_code
+        puts response.error_description
     end
-    
-    responses = api.deliver_messages
-    responses.each do |response|
-        puts response.client_id
-        if response.success
-            puts response.message_id
-        else
-            puts response.error_code
-            puts response.error_description
-        end
-    end
+end
+```
     
 ### Check balance
     
-    require 'clockwork'
-    api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-    balance = Clockwork::API.balance
-    puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
+```ruby
+require 'clockwork'
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+balance = Clockwork::API.balance
+puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
+```
 
 ## License
 
