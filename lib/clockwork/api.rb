@@ -57,8 +57,11 @@ module Clockwork
     # Set to +true+ to trim the message content to the maximum length if it is too long.
     # @return [boolean] 
     # @note This can be overriden for specific Clockwork::SMS objects; if it is not set your account default will be used.
-    attr_accessor :truncate
-    
+    attr_reader :truncate
+
+    def truncate= value
+      @truncate = value ? 1 : 0 unless value.nil?
+    end
     # Whether to use SSL when connecting to the API.
     # Defaults to +true+
     # @return [boolean] 
@@ -77,6 +80,7 @@ module Clockwork
       
     def invalid_char_action= symbol
       raise( ArgumentError, "#{symbol} must be one of :error, :replace, :remove" ) unless [:error, :replace, :remove].include?(symbol.to_sym)
+      @invalid_char_action = [nil, :error, :replace, :remove].index(symbol.to_sym)
     end
     
     def concat= number
@@ -111,6 +115,8 @@ module Clockwork
       @use_ssl = true if @use_ssl.nil?
       @concat = 3 if @concat.nil? && @long
       @messages ||= Clockwork::MessageCollection.new( :api => self )
+      @invalid_char_action = [nil, :error, :replace, :remove].index(@invalid_char_action) if @invalid_char_action
+      @truncate = @truncate ? 1 : 0 unless @truncate.nil?
     end
     
     # Check the remaining credit for this account.
