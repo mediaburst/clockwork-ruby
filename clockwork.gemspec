@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*.rb"] + Dir["[A-Z]*"]
   s.licenses = ['MIT']
   s.add_dependency "nokogiri", "~> 1.5.2"
-
+  s.add_dependency "faraday", "~> 0.8"
   s.add_development_dependency "rake-compiler"
-  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec", "~> 3.1"
   s.has_rdoc = true
 end
