@@ -35,8 +35,12 @@ module Clockwork
     # Set to +true+ to trim the message content to the maximum length if it is too long.
     # @return [boolean] 
     # @note If this option is set it overrides the global option specified in Clockwork::API for this SMS, if neither option is set your account default will be used.
-    attr_accessor :truncate
-        
+    attr_reader :truncate
+
+    def truncate= value
+      @truncate = value ? 1 : 0 unless value.nil?
+    end
+
     # What to do with any invalid characters in the message content. +:error+ will raise a Clockwork::InvalidCharacterException, +:replace+ will replace a small number of common invalid characters, such as the smart quotes used by Microsoft Office with a similar match, +:remove+ will remove invalid characters.
     # @raise ArgumentError - if value is not one of +:error+, +:replace+, +:remove+
     # @return [symbol] One of +error+, +:replace+, +:remove+ 
@@ -58,6 +62,8 @@ module Clockwork
     # Create a new SMS message.
     def initialize options = {}      
       options.each { |k, v| instance_variable_set "@#{k}", v } if options.kind_of?(Hash)
+      @invalid_char_action = [nil, :error, :replace, :remove].index(@invalid_char_action) if @invalid_char_action
+      @truncate = @truncate ? 1 : 0 unless @truncate.nil?
     end
     
     # Deliver the SMS message.
