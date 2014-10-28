@@ -11,7 +11,7 @@ describe "SMS" do
       expect(sms.from).to match("A Test")
       expect(sms.long).to be(true)
       expect(sms.truncate).to be(true)
-      expect(sms.invalid_char_action).to be(:remove)
+      expect(sms.invalid_char_action).to be(2)
     end
 
   end
