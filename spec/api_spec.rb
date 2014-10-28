@@ -38,7 +38,7 @@ describe "API" do
       expect(api.from).to match('A Test')
       expect(api.long).to be(true)
       expect(api.truncate).to be(true)
-      expect(api.invalid_char_action).to be(:remove)
+      expect(api.invalid_char_action).to be(2)
     end
 
   end
