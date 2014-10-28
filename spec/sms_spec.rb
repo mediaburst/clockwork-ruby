@@ -74,6 +74,59 @@ describe "SMS" do
       expect(responses.last.success).to be(false)
       expect(responses.last.error_code).to be(10)
     end
+
+    it "should not send huge message if truncate is false" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'a'*500, :truncate => false )
+      response = message.deliver
+      
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(false)
+      expect(response.message_id).to be_nil
+      expect(response.error_code).to be(12)
+    end
+
+    it "should send huge message if truncate is true" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'a'*500, :truncate => true )
+      response = message.deliver
+      
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(true)
+      expect(response.message_id).not_to be_empty
+    end
+
+    it "should fail to send unicode snowman if invalid_char_action is error" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'snowman - ☃ - snowman', :invalid_char_action => :error )
+      response = message.deliver
+      
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(false)
+      expect(response.message_id).to be_nil
+      expect(response.error_code).to be(39)
+    end
+
+    it "should send unicode snowman if invalid_char_action is replace" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'snowman - ☃ - snowman', :invalid_char_action => :replace )
+      response = message.deliver
+      
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(true)
+      expect(response.message_id).not_to be_empty
+    end
+
+    it "should send unicode snowman if invalid_char_action is remove" do
+      api = Clockwork::API.new test_api_key
+      message = api.messages.build( :to => '441234123456', :content => 'snowman - ☃ - snowman', :invalid_char_action => :remove )
+      response = message.deliver
+      
+      expect(response).to be_an_instance_of Clockwork::SMS::Response
+      expect(response.success).to be(true)
+      expect(response.message_id).not_to be_empty
+    end
+
     
   end
   
