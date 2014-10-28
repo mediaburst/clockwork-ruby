@@ -142,3 +142,9 @@ Then, run `rspec`.
 
 * Compatability fixes for Ruby 1.8, 2.0 and 2.1 (Tested with 1.8.7-p375, 1.9.3-p547, 2.0.0-p481 and 2.1.2).
 Thanks to [Paul Volpato](https://github.com/volpe), [Todd Bealmear](https://github.com/todd) and [Fawad](https://github.com/fawad) for the pull requests.
+
+### 1.2.1 (28th September, 2014)
+
+* Add some tests for the invalid_char_action and truncate parameters.
+* Fix invalid_char_action parameter as it was passing invalid values to the Clockwork API.
+Thanks to [Tom Pesman](https://github.com/tompesman) for the fix.

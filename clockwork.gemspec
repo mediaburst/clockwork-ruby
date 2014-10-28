@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "clockworksms"
-  s.version = "1.2.0"
+  s.version = "1.2.1"
   s.author = "Mediaburst"
   s.email = "hello@mediaburst.co.uk"
   s.homepage = "http://www.clockworksms.com/"
