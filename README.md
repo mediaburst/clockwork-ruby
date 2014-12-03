@@ -72,7 +72,7 @@ messages.each do |m|
     api.messages.build(m)
 end
 
-responses = api.deliver_messages
+responses = api.deliver
 responses.each do |response|
     puts response.client_id
     if response.success
