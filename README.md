@@ -93,6 +93,10 @@ balance = Clockwork::API.balance
 puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
 ```
 
+## Help & Support
+
+If you find a bug please file a Github issue with as much detail as you can or submit a pull request. If you need a bit of help or just fancy a chat drop us an email at [hello@clockworksms.com][2].
+
 ## License
 
 This project is licensed under the MIT open-source license.
@@ -110,10 +114,6 @@ and submit a pull request. Please add RSpec tests for your use case.
 
 If we don't respond to your bug report or pull request within a few days please email [hello@clockworksms.com][2] or remind [@ClockworkSMS on Twitter][7], we probably haven't spotted the notification.
 
-## Help & Support
-
-If you find a bug please file a Github issue, if you need a bit of help or just fanch a chat drop us an email at [hello@clockworksms.com][2] with as much detail as you can.
-
 ### Test Setup
 
 First, create a file at spec/spec_authentication_details containing the following:
@@ -123,14 +123,6 @@ First, create a file at spec/spec_authentication_details containing the followin
 Substitute your own API key on line 1 of the file and replace the telephone numbers in the spec files with your own.
 
 Then, run `rspec`. 
-
-[1]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/frames
-[2]: mailto:hello@clockworksms.com
-[3]: http://www.github.com/mediaburst/clockwork-ruby
-[4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
-[5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS
-[6]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS/Response
-[7]: http://twitter.com/ClockworkSMS
 
 ## Changelog
 
@@ -152,3 +144,12 @@ Thanks to [Paul Volpato](https://github.com/volpe), [Todd Bealmear](https://gith
 * Add some tests for the invalid_char_action and truncate parameters.
 * Fix invalid_char_action parameter as it was passing invalid values to the Clockwork API.
 Thanks to [Tom Pesman](https://github.com/tompesman) for the fix.
+
+
+[1]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/frames
+[2]: mailto:hello@clockworksms.com
+[3]: http://www.github.com/mediaburst/clockwork-ruby
+[4]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/API
+[5]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS
+[6]: http://rubydoc.info/github/mediaburst/clockwork-ruby/master/Clockwork/SMS/Response
+[7]: http://twitter.com/ClockworkSMS
