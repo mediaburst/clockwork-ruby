@@ -110,6 +110,10 @@ and submit a pull request. Please add RSpec tests for your use case.
 
 If we don't respond to your bug report or pull request within a few days please email [hello@clockworksms.com][2] or remind [@ClockworkSMS on Twitter][7], we probably haven't spotted the notification.
 
+## Help & Support
+
+If you find a bug please file a Github issue, if you need a bit of help or just fanch a chat drop us an email at [hello@clockworksms.com][2] with as much detail as you can.
+
 ### Test Setup
 
 First, create a file at spec/spec_authentication_details containing the following:
