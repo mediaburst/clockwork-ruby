@@ -74,7 +74,7 @@ end
 
 responses = api.deliver
 responses.each do |response|
-    puts response.client_id
+    puts response.message.client_id
     if response.success
         puts response.message_id
     else
