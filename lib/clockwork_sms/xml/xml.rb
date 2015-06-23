@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-module Clockwork
+module ClockworkSMS
 
   # @author James Inman <james@mediaburst.co.uk>
   # Wrapper for the XML builder/parser

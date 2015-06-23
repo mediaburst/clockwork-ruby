@@ -1,4 +1,4 @@
-module Clockwork
+module ClockworkSMS
   
   # @author James Inman <james@mediaburst.co.uk>
   # Wrapper around NET/HTTP
@@ -26,7 +26,7 @@ module Clockwork
       
       req.content_type = "text/xml"
       req.body = data
-      req.add_field "User-Agent", "Clockwork Ruby Wrapper/#{Clockwork::VERSION}"
+      req.add_field "User-Agent", "ClockworkSMS Ruby Wrapper/#{ClockworkSMS::VERSION}"
       
       response = socket.start do |http|
         http.request( req )
