@@ -1,4 +1,4 @@
-module Clockwork
+module ClockworkSMS
   module XML
     
     # @author James Inman <james@mediaburst.co.uk>
@@ -6,7 +6,7 @@ module Clockwork
     class Balance
       
       # Build the XML data to check the balance from the XML API.
-      # @param [Clockwork::API] api Instance of Clockwork::API
+      # @param [ClockworkSMS::API] api Instance of ClockworkSMS::API
       # @return [string] XML data
       def self.build api
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
@@ -24,9 +24,9 @@ module Clockwork
     
       # Parse the XML response.
       # @param [Net::HTTPResponse] response Instance of Net::HTTPResponse
-      # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
-      # @raise Clockwork::Error::Generic - if the API returns an error code other than 2
-      # @raise Clockwork::Error::Authentication - if API login details are incorrect 
+      # @raise ClockworkSMS:HTTPError - if a connection to the ClockworkSMS API cannot be made
+      # @raise ClockworkSMS::Error::Generic - if the API returns an error code other than 2
+      # @raise ClockworkSMS::Error::Authentication - if API login details are incorrect
       # @return [string] Number of remaining credits    
       def self.parse response
         if response.code.to_i == 200
@@ -38,12 +38,12 @@ module Clockwork
             hsh[:currency] = { :code  => doc.css('Balance_Resp').css('Currency').css('Code').inner_html, :symbol => doc.css('Balance_Resp').css('Currency').css('Symbol').inner_html }
             hsh
           elsif doc.css('ErrNo').inner_html.to_i == 2
-            raise Clockwork::Error::Authentication, doc.css('ErrDesc').inner_html
+            raise ClockworkSMS::Error::Authentication, doc.css('ErrDesc').inner_html
           else
-            raise Clockwork::Error::Generic, doc.css('ErrDesc').inner_html
+            raise ClockworkSMS::Error::Generic, doc.css('ErrDesc').inner_html
           end
         else
-          raise Clockwork::Error::HTTP, "Could not connect to the Clockwork API to check balance."
+          raise ClockworkSMS::Error::HTTP, "Could not connect to the ClockworkSMS API to check balance."
         end
       end
       

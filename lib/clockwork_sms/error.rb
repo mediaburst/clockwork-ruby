@@ -1,6 +1,6 @@
-module Clockwork
+module ClockworkSMS
   
-  # Module containing Clockwork::Error classes, all of which extend StandardError.
+  # Module containing ClockworkSMS::Error classes, all of which extend StandardError.
   module Error
 
     # @author James Inman <james@mediaburst.co.uk>

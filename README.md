@@ -12,15 +12,15 @@ Full documentation is at [http://rubydoc.info/github/mediaburst/clockwork-ruby/m
 
 ## Usage
 
-For more information on the available optional parameters for the API (Clockwork::API), see [here][4].
+For more information on the available optional parameters for the API (ClockworkSMS::API), see [here][4].
 
-For more information on the available optional parameters for each SMS (Clockwork::SMS), see [here][5]. For more information on the response object returned from each SMS (Clockwork::SMS::Response), see [here][6].
+For more information on the available optional parameters for each SMS (ClockworkSMS::SMS), see [here][5]. For more information on the response object returned from each SMS (ClockworkSMS::SMS::Response), see [here][6].
 
 ### Send a single SMS message
 
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = ClockworkSMS::API.new( 'API_KEY_GOES_HERE' )
 message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
 response = message.deliver
     
@@ -36,7 +36,7 @@ end
 
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = ClockworkSMS::API.new( 'API_KEY_GOES_HERE' )
     
 message = api.messages.build
 message.to = '441234123456'
@@ -53,7 +53,7 @@ end
 
 ### Send multiple SMS messages (with an optional client ID)
 
-You should not use the `Clockwork::Message#deliver` method for each message, but instead use the `Clockwork::API#deliver` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed significantly faster.
+You should not use the `ClockworkSMS::Message#deliver` method for each message, but instead use the `ClockworkSMS::API#deliver` method to send multiple messages in the same API request. This will decrease load on the API and ensure your requests are processed significantly faster.
 
 ```ruby
 
@@ -67,7 +67,7 @@ messages = [
 ]
 
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = ClockworkSMS::API.new( 'API_KEY_GOES_HERE' )
 messages.each do |m|
     api.messages.build(m)
 end
@@ -88,8 +88,8 @@ end
     
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
-balance = Clockwork::API.balance
+api = ClockworkSMS::API.new( 'API_KEY_GOES_HERE' )
+balance = ClockworkSMS::API.balance
 puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
 ```
 

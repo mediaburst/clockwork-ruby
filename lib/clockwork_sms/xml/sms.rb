@@ -1,4 +1,4 @@
-module Clockwork
+module ClockworkSMS
   module XML
     
     # @author James Inman <james@mediaburst.co.uk>
@@ -6,7 +6,7 @@ module Clockwork
     class SMS
       
       # Build the XML data to send a single SMS using the XML API.
-      # @param [Clockwork::SMS] sms Instance of Clockwork::SMS
+      # @param [ClockworkSMS::SMS] sms Instance of ClockworkSMS::SMS
       # @return [string] XML data
       def self.build_single sms
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
@@ -28,7 +28,7 @@ module Clockwork
       end
       
       # Build the XML data to send multiple SMS messages using the XML API.
-      # @param [Clockwork::MessageCollection] collection Instance of Clockwork::SMS
+      # @param [ClockworkSMS::MessageCollection] collection Instance of ClockworkSMS::SMS
       # @return [string] XML data
       def self.build_multiple collection
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
@@ -52,12 +52,12 @@ module Clockwork
       end
       
       # Parse the XML data from a single SMS response from the XML API.
-      # @param [Clockwork::SMS] sms Instance of Clockwork::SMS
+      # @param [ClockworkSMS::SMS] sms Instance of ClockworkSMS::SMS
       # @param [Net::HTTPResponse] http_response Instance of Net:HTTPResponse
-      # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
-      # @return [Clockwork::SMS::Response] Instance of Clockwork::SMS::Response for the message
+      # @raise ClockworkSMS:HTTPError - if a connection to the ClockworkSMS API cannot be made
+      # @return [ClockworkSMS::SMS::Response] Instance of ClockworkSMS::SMS::Response for the message
       def self.parse_single sms, http_response
-        response = Clockwork::SMS::Response.new
+        response = ClockworkSMS::SMS::Response.new
         response.message = sms
         
         if http_response.code.to_i == 200
@@ -71,28 +71,28 @@ module Clockwork
             response.error_description = doc.css('ErrDesc').inner_html
           end
         else
-          raise Clockwork::Error::HTTP, "Could not connect to the Clockwork API to send SMS."
+          raise ClockworkSMS::Error::HTTP, "Could not connect to the ClockworkSMS API to send SMS."
         end
         
         response        
       end
 
       # Parse the XML data from a multiple SMS response from the XML API.
-      # @param [Clockwork::MessageCollection] collection Instance of Clockwork::SMS
+      # @param [ClockworkSMS::MessageCollection] collection Instance of ClockworkSMS::SMS
       # @param [Net::HTTPResponse] http_response Instance of Net:HTTPResponse
-      # @raise Clockwork:HTTPError - if a connection to the Clockwork API cannot be made
-      # @return [array] Array of Clockwork::SMS::Response objects relating to the messages
+      # @raise ClockworkSMS:HTTPError - if a connection to the ClockworkSMS API cannot be made
+      # @return [array] Array of ClockworkSMS::SMS::Response objects relating to the messages
       def self.parse_multiple collection, http_response
         responses = []
         
         if http_response.code.to_i == 200
           doc = Nokogiri.parse( http_response.body )
         else
-          raise Clockwork::Error::HTTP, "Could not connect to the Clockwork API to send SMS."
+          raise ClockworkSMS::Error::HTTP, "Could not connect to the ClockworkSMS API to send SMS."
         end
         
         doc.css('SMS_Resp').each_with_index do |sms_response, i|
-          response = Clockwork::SMS::Response.new
+          response = ClockworkSMS::SMS::Response.new
           response.message = collection.messages[i]
           if sms_response.css('ErrDesc').empty?
             response.success = true

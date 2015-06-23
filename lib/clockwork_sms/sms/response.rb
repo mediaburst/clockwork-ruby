@@ -1,8 +1,8 @@
-module Clockwork
+module ClockworkSMS
   class SMS
     
     # @author James Inman <james@mediaburst.co.uk>
-    # A Clockwork::SMS::Response is returned for each SMS sent by Clockwork::SMS#deliver.
+    # A ClockworkSMS::SMS::Response is returned for each SMS sent by ClockworkSMS::SMS#deliver.
     class Response
         
       # @!attribute error_code
@@ -21,8 +21,8 @@ module Clockwork
       attr_accessor :message_id
         
       # @!attribute message
-      # The instance of Clockwork::SMS relating to this response.
-      # @return [Clockwork::SMS] 
+      # The instance of ClockworkSMS::SMS relating to this response.
+      # @return [ClockworkSMS::SMS]
       attr_accessor :message
         
       # @!attribute success

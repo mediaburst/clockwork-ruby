@@ -1,1 +1,1 @@
-require File.join( File.dirname(__FILE__) + "/../lib/clockwork" )
+require File.join(File.dirname(__FILE__) + "/../lib/clockwork_sms")
