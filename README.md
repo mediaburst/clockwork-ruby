@@ -20,7 +20,7 @@ For more information on the available optional parameters for each SMS (Clockwor
 
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' ) #Be careful not to post your API Keys to public repositories.
 message = api.messages.build( :to => '441234123456', :content => 'This is a test message.' )
 response = message.deliver
     
@@ -36,7 +36,7 @@ end
 
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' ) #Be careful not to post your API Keys to public repositories.
     
 message = api.messages.build
 message.to = '441234123456'
@@ -67,7 +67,7 @@ messages = [
 ]
 
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' ) #Be careful not to post your API Keys to public repositories.
 messages.each do |m|
     api.messages.build(m)
 end
@@ -88,7 +88,7 @@ end
     
 ```ruby
 require 'clockwork'
-api = Clockwork::API.new( 'API_KEY_GOES_HERE' )
+api = Clockwork::API.new( 'API_KEY_GOES_HERE' ) #Be careful not to post your API Keys to public repositories.
 balance = Clockwork::API.balance
 puts balance # => { :account_type => "PAYG", :balance => 575.23, :currency => { :code => "GBP", :symbol => "£" } }
 ```
